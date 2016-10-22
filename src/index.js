@@ -1,14 +1,6 @@
-import template from 'babel-template';
-
 export default function ({types: t}) {
   var restoreIdentifier = t.identifier('restore');
   var defaultIdentifier = t.identifier('default');
-
-  const restore = template(`
-    function restore() {
-      BODY
-    }
-  `);
 
   return {
     visitor: {
@@ -19,13 +11,11 @@ export default function ({types: t}) {
         exit: function (path, state) {
           if (!state.exports.length) return;
           var vars = state.exports.map(e => t.variableDeclarator(e.temp, e.local));
-          var restoreFunction = restore({
-            BODY: state.exports.map(e => t.assignmentExpression('=', e.local, e.temp))
-          });
+          var assignments = state.exports.map(e => t.expressionStatement(t.assignmentExpression('=', e.local, e.temp)));
           path.pushContainer('body', [
             t.variableDeclaration('var', vars),
-            restoreFunction,
-            t.ExportNamedDeclaration(null, [t.exportSpecifier(restoreIdentifier, restoreIdentifier)])
+            t.functionDeclaration(restoreIdentifier, [], t.blockStatement(assignments)),
+            t.exportNamedDeclaration(null, [t.exportSpecifier(restoreIdentifier, restoreIdentifier)])
           ]);
         }
       },
@@ -37,7 +27,7 @@ export default function ({types: t}) {
             local: declaration,
             temp: path.scope.generateUidIdentifier('default')
           });
-          path.replaceWith(t.ExportNamedDeclaration(null, [
+          path.replaceWith(t.exportNamedDeclaration(null, [
             t.exportSpecifier(declaration, defaultIdentifier)
           ]));
         } else if (t.isFunctionDeclaration(declaration)) {
@@ -51,7 +41,7 @@ export default function ({types: t}) {
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.functionExpression(id, declaration.params, declaration.body, declaration.generator, declaration.async))
             ]),
-            t.ExportNamedDeclaration(null, [
+            t.exportNamedDeclaration(null, [
               t.exportSpecifier(id, defaultIdentifier)
             ])
           ]);
