@@ -23,7 +23,7 @@ export default function ({types: t}) {
         var declaration = path.node.declaration;
         if (t.isIdentifier(declaration)) {
           state.exports.push({
-            name: 'default',
+            exported: defaultIdentifier,
             local: declaration,
             temp: path.scope.generateUidIdentifier('default')
           });
@@ -33,7 +33,7 @@ export default function ({types: t}) {
         } else if (t.isFunctionDeclaration(declaration)) {
           const id = declaration.id || path.scope.generateUidIdentifier('default');
           state.exports.push({
-            name: 'default',
+            exported: defaultIdentifier,
             local: id,
             temp: path.scope.generateUidIdentifier('default')
           });
@@ -45,6 +45,18 @@ export default function ({types: t}) {
               t.exportSpecifier(id, defaultIdentifier)
             ])
           ]);
+        }
+      },
+      ExportNamedDeclaration: function (path, state) {
+        var declaration = path.node.declaration;
+        if (t.isVariableDeclaration(declaration)) {
+          declaration.declarations.forEach(d => {
+            state.exports.push({
+              exported: d.id,
+              local: d.id,
+              temp: path.scope.generateUidIdentifierBasedOnNode(d.id)
+            });
+          });
         }
       }
     }
