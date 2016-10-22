@@ -1,6 +1,15 @@
 export default function ({types: t}) {
   var restoreIdentifier = t.identifier('restore');
   var defaultIdentifier = t.identifier('default');
+  var IGNORE_SYMBOL = Symbol();
+
+  function buildNamedExport(local, exported) {
+    var node = t.exportNamedDeclaration(null, [
+      t.exportSpecifier(local, exported)
+    ]);
+    node[IGNORE_SYMBOL] = true;
+    return node;
+  }
 
   return {
     visitor: {
@@ -15,7 +24,7 @@ export default function ({types: t}) {
           path.pushContainer('body', [
             t.variableDeclaration('var', vars),
             t.functionDeclaration(restoreIdentifier, [], t.blockStatement(assignments)),
-            t.exportNamedDeclaration(null, [t.exportSpecifier(restoreIdentifier, restoreIdentifier)])
+            buildNamedExport(restoreIdentifier, restoreIdentifier)
           ]);
         }
       },
@@ -27,9 +36,7 @@ export default function ({types: t}) {
             local: declaration,
             temp: path.scope.generateUidIdentifier('default')
           });
-          path.replaceWith(t.exportNamedDeclaration(null, [
-            t.exportSpecifier(declaration, defaultIdentifier)
-          ]));
+          path.replaceWith(buildNamedExport(declaration, defaultIdentifier));
         } else if (t.isFunctionDeclaration(declaration)) {
           const id = declaration.id || path.scope.generateUidIdentifier('default');
           state.exports.push({
@@ -41,13 +48,12 @@ export default function ({types: t}) {
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.functionExpression(id, declaration.params, declaration.body, declaration.generator, declaration.async))
             ]),
-            t.exportNamedDeclaration(null, [
-              t.exportSpecifier(id, defaultIdentifier)
-            ])
+            buildNamedExport(id, defaultIdentifier)
           ]);
         }
       },
       ExportNamedDeclaration: function (path, state) {
+        if (path.node[IGNORE_SYMBOL]) return;
         var declaration = path.node.declaration;
         if (t.isVariableDeclaration(declaration)) {
           declaration.declarations.forEach(d => {
@@ -55,6 +61,14 @@ export default function ({types: t}) {
               exported: d.id,
               local: d.id,
               temp: path.scope.generateUidIdentifierBasedOnNode(d.id)
+            });
+          });
+        } else {
+          path.node.specifiers.forEach(s => {
+            state.exports.push({
+              exported: s.exported,
+              local: s.local,
+              temp: path.scope.generateUidIdentifierBasedOnNode(s.local)
             });
           });
         }
