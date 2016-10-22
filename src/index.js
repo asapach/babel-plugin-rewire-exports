@@ -4,10 +4,21 @@ export default function ({types: t}) {
       Program: function () {
       },
       ExportDefaultDeclaration: function (path) {
-        if (t.isIdentifier(path.node.declaration)) {
+        var declaration = path.node.declaration;
+        if (t.isIdentifier(declaration)) {
           path.replaceWith(t.ExportNamedDeclaration(null, [
-            t.exportSpecifier(path.node.declaration, t.identifier('default'))
+            t.exportSpecifier(declaration, t.identifier('default'))
           ]));
+        } else if (t.isFunctionDeclaration(declaration)) {
+          const id = declaration.id || path.scope.generateUidIdentifier('default');
+          path.replaceWithMultiple([
+            t.variableDeclaration('var', [
+              t.variableDeclarator(id, t.functionExpression(id, declaration.params, declaration.body, declaration.generator, declaration.async))
+            ]),
+            t.ExportNamedDeclaration(null, [
+              t.exportSpecifier(id, t.identifier('default'))
+            ])
+          ]);
         }
       }
     }
