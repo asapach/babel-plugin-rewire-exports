@@ -21,9 +21,11 @@ export default function ({types: t}) {
           if (!state.exports.length) return;
           var vars = state.exports.map(e => t.variableDeclarator(e.temp, e.local));
           var assignments = state.exports.map(e => t.expressionStatement(t.assignmentExpression('=', e.local, e.temp)));
+          var exported = t.exportNamedDeclaration(t.functionDeclaration(restoreIdentifier, [], t.blockStatement(assignments)), []);
+          exported[IGNORE_SYMBOL] = true;
           path.pushContainer('body', [
             t.variableDeclaration('var', vars),
-            t.exportNamedDeclaration(t.functionDeclaration(restoreIdentifier, [], t.blockStatement(assignments)), [])
+            exported
           ]);
         }
       },
@@ -62,6 +64,19 @@ export default function ({types: t}) {
               temp: path.scope.generateUidIdentifierBasedOnNode(d.id)
             });
           });
+        } else if (t.isFunctionDeclaration(declaration)) {
+          const id = declaration.id;
+          state.exports.push({
+            exported: id,
+            local: id,
+            temp: path.scope.generateUidIdentifierBasedOnNode(id)
+          });
+          path.replaceWithMultiple([
+            t.variableDeclaration('var', [
+              t.variableDeclarator(id, t.functionExpression(id, declaration.params, declaration.body, declaration.generator, declaration.async))
+            ]),
+            buildNamedExport(id, id)
+          ]);
         } else {
           path.node.specifiers.forEach(s => {
             state.exports.push({
