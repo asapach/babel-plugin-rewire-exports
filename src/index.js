@@ -1,7 +1,6 @@
 import template from 'babel-template';
 
 export default function ({types: t}) {
-  const restoreIdentifier = t.identifier('restore');
   const defaultIdentifier = t.identifier('default');
   const rewireIdentifier = t.identifier('rewire');
   const stubIdentifier = t.identifier('$stub');
@@ -10,6 +9,12 @@ export default function ({types: t}) {
   const buildStub = template(`
     export function REWIRE(STUB) {
       LOCAL = STUB;
+    }
+  `, {sourceType: 'module'});
+
+  const buildRestore = template(`
+    export function restore() {
+      RESTORE
     }
   `, {sourceType: 'module'});
 
@@ -43,7 +48,7 @@ export default function ({types: t}) {
           path.pushContainer('body', [
             t.variableDeclaration('var', vars),
             ...stubs,
-            markIgnored(t.exportNamedDeclaration(t.functionDeclaration(restoreIdentifier, [], t.blockStatement(assignments)), []))
+            markIgnored(buildRestore({RESTORE: assignments}))
           ]);
         }
       },
