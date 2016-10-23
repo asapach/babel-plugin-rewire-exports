@@ -1,7 +1,4 @@
-var _default = function () {
-  return null;
-};
-
+var _default = null;
 export { _default as default };
 var _default2 = _default;
 export function restore() {

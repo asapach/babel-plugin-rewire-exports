@@ -11,6 +11,10 @@ export default function ({types: t}) {
     return node;
   }
 
+  function isLiteral(node) {
+    return t.isRegExpLiteral(node) || t.isNullLiteral(node) || t.isStringLiteral(node) || t.isBooleanLiteral(node) || t.isNumericLiteral(node)
+  }
+
   return {
     visitor: {
       Program: {
@@ -39,7 +43,7 @@ export default function ({types: t}) {
           });
           path.replaceWith(buildNamedExport(declaration, defaultIdentifier));
         } else if (t.isFunctionDeclaration(declaration)) {
-          const id = declaration.id || path.scope.generateUidIdentifier('default');
+          const id = path.scope.generateUidIdentifier('default');
           state.exports.push({
             exported: defaultIdentifier,
             local: id,
@@ -47,8 +51,19 @@ export default function ({types: t}) {
           });
           path.replaceWithMultiple([
             t.variableDeclaration('var', [
-              t.variableDeclarator(id, t.functionExpression(id, declaration.params, declaration.body, declaration.generator, declaration.async))
+              t.variableDeclarator(id, t.functionExpression(declaration.id, declaration.params, declaration.body, declaration.generator, declaration.async))
             ]),
+            buildNamedExport(id, defaultIdentifier)
+          ]);
+        } else if (isLiteral(declaration)) {
+          const id = path.scope.generateUidIdentifier('default');
+          state.exports.push({
+            exported: defaultIdentifier,
+            local: id,
+            temp: path.scope.generateUidIdentifier('default')
+          });
+          path.replaceWithMultiple([
+            t.variableDeclaration('var', [t.variableDeclarator(id, declaration)]),
             buildNamedExport(id, defaultIdentifier)
           ]);
         }

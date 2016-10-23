@@ -1,9 +1,9 @@
-var foo = function foo() {
+var _default = function foo() {
   return null;
 };
 
-export { foo as default };
-var _default = foo;
+export { _default as default };
+var _default2 = _default;
 export function restore() {
-  foo = _default;
+  _default = _default2;
 }
