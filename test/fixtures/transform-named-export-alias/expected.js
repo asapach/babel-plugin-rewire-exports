@@ -1,6 +1,6 @@
 var foo;
 export { foo as bar };
-var _foo = foo;
+var _bar = foo;
 export function restore() {
-  foo = _foo;
+  foo = _bar;
 }

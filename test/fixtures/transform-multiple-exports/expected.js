@@ -16,11 +16,11 @@ var baz = true;
 export { bar as qux, baz };
 var _default2 = _default,
     _bar = bar,
-    _bar2 = bar,
+    _qux = bar,
     _baz = baz;
 export function restore() {
   _default = _default2;
   bar = _bar;
-  bar = _bar2;
+  bar = _qux;
   baz = _baz;
 }
