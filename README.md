@@ -1,5 +1,99 @@
 # babel-plugin-rewire-exports
 
+Babel plugin for stubbing module exports. It allows to rewire the the exported values in all the importing modules.
+Unlike [babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire) it doesn't modify the module
+internals (e.g. imports and top-level variables and functions). See [How it works]() section for implementation details.
+
+## Exports
+Plugin transforms module exports in such a way that they can be stubbed (or "rewired") via an API:
+* default export - plugin exports additional `rewire(stub)` function that allows to replace the original
+* named exports - for each export (e.g. `export var foo`) an additional function `rewire$foo(stub)` is exported
+* `restore()` function allows to restore the exports to their original values
+
+### Example
+
+Named export:
+```js
+//------ text.js ------
+export let message = 'Hello world!'
+
+//------ logger.js ------
+import {message} from './text.js'
+
+export default function () {
+  console.log(message)
+}
+
+//------ main.js ------
+import {rewire$message, restore} from './text.js'
+import logger from './logger.js'
+
+logger() // 'Hello world!'
+rewire$message('I am now rewired')
+logger() // 'I am now rewired'
+restore()
+logger() // 'Hello world!'
+```
+
+Default export:
+```js
+//------ fetch.js ------
+export default function (url) {
+  // perform some expensive remote call
+}
+
+//------ adapter.js ------
+import fetch from './fetch.js'
+
+export function fetchItems() {
+  return fetch('/items')
+}
+
+//------ test.js ------
+import {rewire, restore} from './fetch.js'
+import {fetchItems} from './adapter.js'
+
+describe('adapter', function () {
+  beforeEach(function () {
+    rewire(this.spy = jasmine.createSpy('fetch'))
+  })
+  afterAll(restore)
+  
+  it('should call fetch', function () {
+    fetchItems()
+    expect(this.spy.toHaveBeenCalledWith('/items'))
+  })
+})
+```
+
+## How it works
+[In ES6, imports are live read-only views on exported values](
+http://exploringjs.com/es6/ch_modules.html#_in-es6-imports-are-live-read-only-views-on-exported-values):
+
+```js
+//------ lib.js ------
+export let counter = 3;
+export function incCounter() {
+    counter++;
+}
+
+//------ main1.js ------
+import { counter, incCounter } from './lib';
+
+// The imported value `counter` is live
+console.log(counter); // 3
+incCounter();
+console.log(counter); // 4
+
+// The imported value can’t be changed
+counter++; // TypeError
+```
+
+This allows for any exports to be overwritten from within the module -
+and imports will be automatically updated via their bindings.
+
+TODO: implementation details
+
 ## Installation
 
 ```sh
