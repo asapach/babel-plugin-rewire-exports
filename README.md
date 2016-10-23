@@ -67,9 +67,10 @@ describe('adapter', function () {
 ```
 
 ## Compatibility
-* :star: SystemJS
+* :heart: Should work in modern browsers once they start implementing ES6 modules natively - for example tested in latest Edge with [experimental flags](https://blogs.windows.com/msedgedev/2016/05/17/es6-modules-and-beyond/)
+* :sparkles: SystemJS
 * :star2: Webpack 2
-* :sparkles: Rollup doesn't support rewiring default exports
+* :bug: Rollup doesn't support rewiring default exports
 * :hankey: CommonJS and AMD will only work if you use `import * as ...` notation consistently
 
 ## How it works
