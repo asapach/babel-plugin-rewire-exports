@@ -100,6 +100,9 @@ export default function ({types: t}) {
       // export {}
       ExportNamedDeclaration: function (path, {exports}) {
         if (path.node[IGNORE_SYMBOL]) return;
+        // export { foo } from './bar.js'
+        if (path.node.source) return;
+
         var declaration = path.node.declaration;
         if (t.isVariableDeclaration(declaration)) {
           // export const foo = 'bar'
