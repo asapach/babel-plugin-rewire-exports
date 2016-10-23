@@ -1,9 +1,6 @@
 var foo;
 export { foo };
 var _foo = foo;
-
-function restore() {
+export function restore() {
   foo = _foo;
 }
-
-export { restore };

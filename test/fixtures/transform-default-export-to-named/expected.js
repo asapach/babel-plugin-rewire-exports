@@ -1,9 +1,6 @@
 var foo;
 export { foo as default };
 var _default = foo;
-
-function restore() {
+export function restore() {
   foo = _default;
 }
-
-export { restore };

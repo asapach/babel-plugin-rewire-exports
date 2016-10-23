@@ -23,8 +23,7 @@ export default function ({types: t}) {
           var assignments = state.exports.map(e => t.expressionStatement(t.assignmentExpression('=', e.local, e.temp)));
           path.pushContainer('body', [
             t.variableDeclaration('var', vars),
-            t.functionDeclaration(restoreIdentifier, [], t.blockStatement(assignments)),
-            buildNamedExport(restoreIdentifier, restoreIdentifier)
+            t.exportNamedDeclaration(t.functionDeclaration(restoreIdentifier, [], t.blockStatement(assignments)), [])
           ]);
         }
       },

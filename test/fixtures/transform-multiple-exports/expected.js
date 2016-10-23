@@ -15,11 +15,8 @@ export { bar as qux, baz };
 var _default = foo,
     _bar = bar,
     _baz = baz;
-
-function restore() {
+export function restore() {
   foo = _default;
   bar = _bar;
   baz = _baz;
 }
-
-export { restore };
