@@ -1,16 +1,21 @@
+import template from 'babel-template';
+
 export default function ({types: t}) {
-  var restoreIdentifier = t.identifier('restore');
-  var defaultIdentifier = t.identifier('default');
-  var rewiredIdentifier = t.identifier('$stub');
-  var IGNORE_SYMBOL = Symbol();
+  const restoreIdentifier = t.identifier('restore');
+  const defaultIdentifier = t.identifier('default');
+  const rewireIdentifier = t.identifier('rewire');
+  const stubIdentifier = t.identifier('$stub');
+  const IGNORE_SYMBOL = Symbol();
+
+  const buildStub = template(`
+    export function REWIRE(STUB) {
+      LOCAL = STUB;
+    }
+  `, {sourceType: 'module'});
 
   function markIgnored(node) {
     node[IGNORE_SYMBOL] = true;
     return node;
-  }
-
-  function isLiteral(node) {
-    return t.isRegExpLiteral(node) || t.isNullLiteral(node) || t.isStringLiteral(node) || t.isBooleanLiteral(node) || t.isNumericLiteral(node);
   }
 
   return {
@@ -27,11 +32,14 @@ export default function ({types: t}) {
             temp: path.scope.generateUidIdentifierBasedOnNode(exported)
           }));
           var vars = rewired.map(({local, temp}) => t.variableDeclarator(temp, local));
+          var stubs = rewired.map(({exported, local}) => markIgnored(
+            buildStub({
+              REWIRE: t.isIdentifier(exported, defaultIdentifier) ? rewireIdentifier : t.identifier(`rewire$${exported.name}`),
+              LOCAL: local,
+              STUB: stubIdentifier
+            })
+          ));
           var assignments = rewired.map(({local, temp}) => t.expressionStatement(t.assignmentExpression('=', local, temp)));
-          var stubs = rewired.map(({exported, local}) => markIgnored(t.exportNamedDeclaration(t.functionDeclaration(
-            t.identifier(`rewire$${exported.name}`), [rewiredIdentifier], t.blockStatement([
-              t.expressionStatement(t.assignmentExpression('=', local, rewiredIdentifier))
-            ])), [])));
           path.pushContainer('body', [
             t.variableDeclaration('var', vars),
             ...stubs,
@@ -60,8 +68,8 @@ export default function ({types: t}) {
               t.exportSpecifier(id, defaultIdentifier)
             ]))
           ]);
-        } else if (isLiteral(declaration)) {
-          // export default null
+        } else {
+          // export default ...
           const id = path.scope.generateUidIdentifier('default');
           exports.set(defaultIdentifier, id);
           path.replaceWithMultiple([

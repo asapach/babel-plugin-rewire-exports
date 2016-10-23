@@ -18,7 +18,7 @@ var _default2 = _default,
     _bar = bar,
     _qux = bar,
     _baz = baz;
-export function rewire$default($stub) {
+export function rewire($stub) {
   _default = $stub;
 }
 export function rewire$bar($stub) {
