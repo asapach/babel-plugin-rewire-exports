@@ -16,15 +16,14 @@ export default function ({types: t}) {
     visitor: {
       Program: {
         enter: function (path, state) {
-          state.exports = {};
+          state.exports = new Map();
         },
         exit: function (path, {exports}) {
-          var exported = Object.keys(exports);
-          if (!exported.length) return;
-          var rewired = exported.map(e => ({
-            exported: t.identifier(e),
-            local: exports[e],
-            temp: path.scope.generateUidIdentifier(e)
+          if (!exports.size) return;
+          var rewired = Array.from(exports.entries()).map(([exported, local]) => ({
+            exported,
+            local,
+            temp: path.scope.generateUidIdentifierBasedOnNode(exported)
           }));
           var vars = rewired.map(({local, temp}) => t.variableDeclarator(temp, local));
           var assignments = rewired.map(({local, temp}) => t.expressionStatement(t.assignmentExpression('=', local, temp)));
@@ -37,13 +36,13 @@ export default function ({types: t}) {
       ExportDefaultDeclaration: function (path, {exports}) {
         var declaration = path.node.declaration;
         if (t.isIdentifier(declaration)) {
-          exports[defaultIdentifier.name] = declaration;
+          exports.set(defaultIdentifier, declaration);
           path.replaceWith(markIgnored(t.exportNamedDeclaration(null, [
             t.exportSpecifier(declaration, defaultIdentifier)
           ])));
         } else if (t.isFunctionDeclaration(declaration)) {
           const id = path.scope.generateUidIdentifier('default');
-          exports[defaultIdentifier.name] = id;
+          exports.set(defaultIdentifier, id);
           path.replaceWithMultiple([
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.functionExpression(declaration.id, declaration.params, declaration.body, declaration.generator, declaration.async))
@@ -54,7 +53,7 @@ export default function ({types: t}) {
           ]);
         } else if (isLiteral(declaration)) {
           const id = path.scope.generateUidIdentifier('default');
-          exports[defaultIdentifier.name] = id;
+          exports.set(defaultIdentifier, id);
           path.replaceWithMultiple([
             t.variableDeclaration('var', [t.variableDeclarator(id, declaration)]),
             markIgnored(t.exportNamedDeclaration(null, [
@@ -68,11 +67,11 @@ export default function ({types: t}) {
         var declaration = path.node.declaration;
         if (t.isVariableDeclaration(declaration)) {
           declaration.declarations.forEach(({id}) => {
-            exports[id.name] = id;
+            exports.set(id, id);
           });
         } else if (t.isFunctionDeclaration(declaration)) {
           const id = declaration.id;
-          exports[id.name] = id;
+          exports.set(id, id);
           path.replaceWithMultiple([
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.functionExpression(id, declaration.params, declaration.body, declaration.generator, declaration.async))
@@ -83,7 +82,7 @@ export default function ({types: t}) {
           ]);
         } else {
           path.node.specifiers.forEach(({exported, local}) => {
-            exports[exported.name] = local;
+            exports.set(exported, local);
           });
         }
       }
