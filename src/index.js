@@ -9,7 +9,7 @@ export default function ({types: t}) {
   }
 
   function isLiteral(node) {
-    return t.isRegExpLiteral(node) || t.isNullLiteral(node) || t.isStringLiteral(node) || t.isBooleanLiteral(node) || t.isNumericLiteral(node)
+    return t.isRegExpLiteral(node) || t.isNullLiteral(node) || t.isStringLiteral(node) || t.isBooleanLiteral(node) || t.isNumericLiteral(node);
   }
 
   return {
