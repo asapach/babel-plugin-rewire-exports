@@ -73,6 +73,18 @@ export default function ({types: t}) {
               t.exportSpecifier(id, defaultIdentifier)
             ]))
           ]);
+        } else if (t.isClassDeclaration(declaration)) {
+          //export default class {}
+          const id = path.scope.generateUidIdentifier('default');
+          exports.set(defaultIdentifier, id);
+          path.replaceWithMultiple([
+            t.variableDeclaration('var', [
+              t.variableDeclarator(id, t.classExpression(declaration.id, declaration.superClass, declaration.body, declaration.decorators || []))
+            ]),
+            markIgnored(t.exportNamedDeclaration(null, [
+              t.exportSpecifier(id, defaultIdentifier)
+            ]))
+          ]);
         } else {
           // export default ...
           const id = path.scope.generateUidIdentifier('default');
