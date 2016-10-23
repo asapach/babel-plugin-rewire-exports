@@ -1,12 +1,12 @@
-var _default = function foo() {
+var foo = function foo() {
   return null;
 };
 
-export { _default as default };
-var _default2 = _default;
+export { foo as default };
+var _default = foo;
 export function rewire($stub) {
-  _default = $stub;
+  foo = $stub;
 }
 export function restore() {
-  _default = _default2;
+  foo = _default;
 }

@@ -1,8 +1,8 @@
-var _default = function foo() {
+var foo = function foo() {
   return bar();
 };
 
-export { _default as default };
+export { foo as default };
 
 var bar = function bar() {
   return baz;
@@ -14,12 +14,16 @@ export { bar };
 var baz = true;
 
 export { bar as qux, baz };
-var _default2 = _default,
+
+var whatsit = class whatsit extends foo {};
+export { whatsit };
+var _default = foo,
     _bar = bar,
     _qux = bar,
-    _baz = baz;
+    _baz = baz,
+    _whatsit = whatsit;
 export function rewire($stub) {
-  _default = $stub;
+  foo = $stub;
 }
 export function rewire$bar($stub) {
   bar = $stub;
@@ -30,9 +34,13 @@ export function rewire$qux($stub) {
 export function rewire$baz($stub) {
   baz = $stub;
 }
+export function rewire$whatsit($stub) {
+  whatsit = $stub;
+}
 export function restore() {
-  _default = _default2;
+  foo = _default;
   bar = _bar;
   bar = _qux;
   baz = _baz;
+  whatsit = _whatsit;
 }

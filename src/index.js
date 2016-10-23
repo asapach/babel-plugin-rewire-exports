@@ -63,7 +63,7 @@ export default function ({types: t}) {
           ])));
         } else if (t.isFunctionDeclaration(declaration)) {
           //export default function () {}
-          const id = path.scope.generateUidIdentifier('default');
+          const id = declaration.id || path.scope.generateUidIdentifier('default');
           exports.set(defaultIdentifier, id);
           path.replaceWithMultiple([
             t.variableDeclaration('var', [
@@ -75,7 +75,7 @@ export default function ({types: t}) {
           ]);
         } else if (t.isClassDeclaration(declaration)) {
           //export default class {}
-          const id = path.scope.generateUidIdentifier('default');
+          const id = declaration.id || path.scope.generateUidIdentifier('default');
           exports.set(defaultIdentifier, id);
           path.replaceWithMultiple([
             t.variableDeclaration('var', [
@@ -115,6 +115,18 @@ export default function ({types: t}) {
           path.replaceWithMultiple([
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.functionExpression(id, declaration.params, declaration.body, declaration.generator, declaration.async))
+            ]),
+            markIgnored(t.exportNamedDeclaration(null, [
+              t.exportSpecifier(id, id)
+            ]))
+          ]);
+        } else if (t.isClassDeclaration(declaration)) {
+          // export function class foo {}
+          const id = declaration.id;
+          exports.set(id, id);
+          path.replaceWithMultiple([
+            t.variableDeclaration('var', [
+              t.variableDeclarator(id, t.classExpression(id, declaration.superClass, declaration.body, declaration.decorators || []))
             ]),
             markIgnored(t.exportNamedDeclaration(null, [
               t.exportSpecifier(id, id)

@@ -3,11 +3,11 @@ var foo = class foo {
     this.foo = 'bar';
   }
 };
-export { foo as default };
-var _default = foo;
-export function rewire($stub) {
+export { foo };
+var _foo = foo;
+export function rewire$foo($stub) {
   foo = $stub;
 }
 export function restore() {
-  foo = _default;
+  foo = _foo;
 }
