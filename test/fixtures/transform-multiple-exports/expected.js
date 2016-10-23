@@ -18,6 +18,18 @@ var _default2 = _default,
     _bar = bar,
     _qux = bar,
     _baz = baz;
+export function rewire$default($stub) {
+  _default = $stub;
+}
+export function rewire$bar($stub) {
+  bar = $stub;
+}
+export function rewire$qux($stub) {
+  bar = $stub;
+}
+export function rewire$baz($stub) {
+  baz = $stub;
+}
 export function restore() {
   _default = _default2;
   bar = _bar;

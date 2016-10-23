@@ -1,6 +1,7 @@
 export default function ({types: t}) {
   var restoreIdentifier = t.identifier('restore');
   var defaultIdentifier = t.identifier('default');
+  var rewiredIdentifier = t.identifier('$stub');
   var IGNORE_SYMBOL = Symbol();
 
   function markIgnored(node) {
@@ -27,8 +28,13 @@ export default function ({types: t}) {
           }));
           var vars = rewired.map(({local, temp}) => t.variableDeclarator(temp, local));
           var assignments = rewired.map(({local, temp}) => t.expressionStatement(t.assignmentExpression('=', local, temp)));
+          var stubs = rewired.map(({exported, local}) => markIgnored(t.exportNamedDeclaration(t.functionDeclaration(
+            t.identifier(`rewire$${exported.name}`), [rewiredIdentifier], t.blockStatement([
+              t.expressionStatement(t.assignmentExpression('=', local, rewiredIdentifier))
+            ])), [])));
           path.pushContainer('body', [
             t.variableDeclaration('var', vars),
+            ...stubs,
             markIgnored(t.exportNamedDeclaration(t.functionDeclaration(restoreIdentifier, [], t.blockStatement(assignments)), []))
           ]);
         }
