@@ -71,6 +71,8 @@ export default function ({types: t}) {
         if (path.node[IGNORE_SYMBOL]) return;
         var declaration = path.node.declaration;
         if (t.isVariableDeclaration(declaration)) {
+          // export const foo = 'bar'
+          if (declaration.kind === 'const') return;
           // export var foo
           declaration.declarations.forEach(({id}) => {
             exports.set(id, id);
