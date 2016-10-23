@@ -3,10 +3,7 @@ export default function ({types: t}) {
   var defaultIdentifier = t.identifier('default');
   var IGNORE_SYMBOL = Symbol();
 
-  function buildNamedExport(local, exported) {
-    var node = t.exportNamedDeclaration(null, [
-      t.exportSpecifier(local, exported)
-    ]);
+  function markIgnored(node) {
     node[IGNORE_SYMBOL] = true;
     return node;
   }
@@ -41,7 +38,9 @@ export default function ({types: t}) {
             local: declaration,
             temp: path.scope.generateUidIdentifier('default')
           });
-          path.replaceWith(buildNamedExport(declaration, defaultIdentifier));
+          path.replaceWith(markIgnored(t.exportNamedDeclaration(null, [
+            t.exportSpecifier(declaration, defaultIdentifier)
+          ])));
         } else if (t.isFunctionDeclaration(declaration)) {
           const id = path.scope.generateUidIdentifier('default');
           state.exports.push({
@@ -53,7 +52,9 @@ export default function ({types: t}) {
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.functionExpression(declaration.id, declaration.params, declaration.body, declaration.generator, declaration.async))
             ]),
-            buildNamedExport(id, defaultIdentifier)
+            markIgnored(t.exportNamedDeclaration(null, [
+              t.exportSpecifier(id, defaultIdentifier)
+            ]))
           ]);
         } else if (isLiteral(declaration)) {
           const id = path.scope.generateUidIdentifier('default');
@@ -64,7 +65,9 @@ export default function ({types: t}) {
           });
           path.replaceWithMultiple([
             t.variableDeclaration('var', [t.variableDeclarator(id, declaration)]),
-            buildNamedExport(id, defaultIdentifier)
+            markIgnored(t.exportNamedDeclaration(null, [
+              t.exportSpecifier(id, defaultIdentifier)
+            ]))
           ]);
         }
       },
@@ -90,7 +93,9 @@ export default function ({types: t}) {
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.functionExpression(id, declaration.params, declaration.body, declaration.generator, declaration.async))
             ]),
-            buildNamedExport(id, id)
+            markIgnored(t.exportNamedDeclaration(null, [
+              t.exportSpecifier(id, id)
+            ]))
           ]);
         } else {
           path.node.specifiers.forEach(s => {
