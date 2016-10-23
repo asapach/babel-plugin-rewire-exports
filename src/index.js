@@ -33,14 +33,17 @@ export default function ({types: t}) {
           ]);
         }
       },
+      // export default
       ExportDefaultDeclaration: function (path, {exports}) {
         var declaration = path.node.declaration;
         if (t.isIdentifier(declaration)) {
+          // export default foo
           exports.set(defaultIdentifier, declaration);
           path.replaceWith(markIgnored(t.exportNamedDeclaration(null, [
             t.exportSpecifier(declaration, defaultIdentifier)
           ])));
         } else if (t.isFunctionDeclaration(declaration)) {
+          //export default function () {}
           const id = path.scope.generateUidIdentifier('default');
           exports.set(defaultIdentifier, id);
           path.replaceWithMultiple([
@@ -52,6 +55,7 @@ export default function ({types: t}) {
             ]))
           ]);
         } else if (isLiteral(declaration)) {
+          // export default null
           const id = path.scope.generateUidIdentifier('default');
           exports.set(defaultIdentifier, id);
           path.replaceWithMultiple([
@@ -62,14 +66,17 @@ export default function ({types: t}) {
           ]);
         }
       },
+      // export {}
       ExportNamedDeclaration: function (path, {exports}) {
         if (path.node[IGNORE_SYMBOL]) return;
         var declaration = path.node.declaration;
         if (t.isVariableDeclaration(declaration)) {
+          // export var foo
           declaration.declarations.forEach(({id}) => {
             exports.set(id, id);
           });
         } else if (t.isFunctionDeclaration(declaration)) {
+          // export function foo() {}
           const id = declaration.id;
           exports.set(id, id);
           path.replaceWithMultiple([
@@ -81,6 +88,7 @@ export default function ({types: t}) {
             ]))
           ]);
         } else {
+          // export {foo}
           path.node.specifiers.forEach(({exported, local}) => {
             exports.set(exported, local);
           });
