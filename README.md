@@ -71,7 +71,7 @@ describe('adapter', function () {
 * :sparkles: SystemJS
 * :star2: Webpack 2
 * :bug: Rollup doesn't support rewiring default exports
-* :hankey: CommonJS and AMD will only work if you use `import * as ...` notation consistently
+* :package: Seems to work with CommonJS and AMD (including bundling with webpack)
 
 ## How it works
 [In ES6, imports are live read-only views on exported values](
