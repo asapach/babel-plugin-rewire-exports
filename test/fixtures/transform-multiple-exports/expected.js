@@ -1,5 +1,5 @@
-var foo = _foo;
-var bar = _bar;
+var foo = _foo,
+    bar = _bar;
 function _foo() {
   return bar();
 }
