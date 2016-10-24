@@ -1,4 +1,6 @@
 var foo = _foo;
+foo.bar = 'baz';
+
 function _foo() {
   return null;
 }

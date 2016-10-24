@@ -28,8 +28,9 @@ export default function ({types: t}) {
       Program: {
         enter: function (path, state) {
           state.exports = new Map();
+          state.hoisted = [];
         },
-        exit: function (path, {exports}) {
+        exit: function (path, {exports, hoisted}) {
           if (!exports.size) return;
           var rewired = Array.from(exports.entries()).map(([exported, local]) => ({
             exported: t.identifier(exported.name),
@@ -45,6 +46,7 @@ export default function ({types: t}) {
             })
           ));
           var assignments = rewired.map(({local, temp}) => t.expressionStatement(t.assignmentExpression('=', local, temp)));
+          path.unshiftContainer('body', hoisted);
           path.pushContainer('body', [
             t.variableDeclaration('var', vars),
             ...stubs,
@@ -53,7 +55,7 @@ export default function ({types: t}) {
         }
       },
       // export default
-      ExportDefaultDeclaration: function (path, {exports}) {
+      ExportDefaultDeclaration: function (path, {exports, hoisted}) {
         var declaration = path.node.declaration;
         if (t.isIdentifier(declaration)) {
           // export default foo
@@ -65,14 +67,16 @@ export default function ({types: t}) {
           //export default function () {}
           const id = declaration.id || path.scope.generateUidIdentifier('default');
           exports.set(defaultIdentifier, id);
+          declaration.id = path.scope.generateUidIdentifierBasedOnNode(declaration.id);
           path.replaceWithMultiple([
-            t.variableDeclaration('var', [
-              t.variableDeclarator(id, t.functionExpression(declaration.id, declaration.params, declaration.body, declaration.generator, declaration.async))
-            ]),
+            declaration,
             markVisited(t.exportNamedDeclaration(null, [
               t.exportSpecifier(id, defaultIdentifier)
             ]))
           ]);
+          hoisted.push(t.variableDeclaration('var', [
+            t.variableDeclarator(id, declaration.id)
+          ]));
         } else if (t.isClassDeclaration(declaration)) {
           //export default class {}
           const id = declaration.id || path.scope.generateUidIdentifier('default');

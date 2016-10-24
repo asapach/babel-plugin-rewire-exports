@@ -1,6 +1,7 @@
-var foo = function foo() {
+var foo = _foo;
+function _foo() {
   return bar();
-};
+}
 
 export { foo as default };
 

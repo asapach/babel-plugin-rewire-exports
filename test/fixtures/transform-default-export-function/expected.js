@@ -1,7 +1,7 @@
-var _default = function () {
+var _default = _ref;
+function _ref() {
   return null;
-};
-
+}
 export { _default as default };
 var _default2 = _default;
 export function rewire($stub) {
