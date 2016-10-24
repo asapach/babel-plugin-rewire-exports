@@ -102,7 +102,7 @@ export default function ({types: t}) {
         }
       },
       // export {}
-      ExportNamedDeclaration: function (path, {exports}) {
+      ExportNamedDeclaration: function (path, {exports, hoisted}) {
         if (path.node[VISITED]) return;
         // export { foo } from './bar.js'
         if (path.node.source) return;
@@ -119,14 +119,16 @@ export default function ({types: t}) {
           // export function foo() {}
           const id = declaration.id;
           exports.set(id, id);
+          declaration.id = path.scope.generateUidIdentifierBasedOnNode(id);
           path.replaceWithMultiple([
-            t.variableDeclaration('var', [
-              t.variableDeclarator(id, t.functionExpression(id, declaration.params, declaration.body, declaration.generator, declaration.async))
-            ]),
+            declaration,
             markVisited(t.exportNamedDeclaration(null, [
               t.exportSpecifier(id, id)
             ]))
           ]);
+          hoisted.push(t.variableDeclaration('var', [
+            t.variableDeclarator(id, declaration.id)
+          ]));
         } else if (t.isClassDeclaration(declaration)) {
           // export function class foo {}
           const id = declaration.id;

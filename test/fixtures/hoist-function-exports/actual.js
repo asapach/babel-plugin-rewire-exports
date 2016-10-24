@@ -1,5 +1,9 @@
-foo.bar = 'baz';
+foo.bar = baz;
 
 export default function foo() {
   return null;
+}
+
+export function baz() {
+  return false;
 }
