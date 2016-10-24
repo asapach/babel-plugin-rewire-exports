@@ -27,17 +27,27 @@ export default function ({types: t}) {
     visitor: {
       Program: {
         enter: function (path, state) {
-          state.exports = new Map();
+          state.exports = [];
           state.hoisted = [];
         },
         exit: function (path, {exports, hoisted}) {
-          if (!exports.size) return;
-          var rewired = Array.from(exports.entries()).map(([exported, local]) => ({
+          if (!exports.length) return;
+          // add hoisted variables to the top
+          path.unshiftContainer('body', hoisted);
+
+          // generate temp variables to capture original values
+          var tempVars = [];
+          exports.filter(e => !e.original).forEach(e => {
+            var temp = e.original = path.scope.generateUidIdentifierBasedOnNode(e.exported);
+            tempVars.push(t.variableDeclarator(temp, e.local));
+          });
+
+          //
+          var rewired = exports.map(({exported, local, original}) => ({
             exported: t.identifier(exported.name),
             local: t.identifier(local.name),
-            temp: path.scope.generateUidIdentifierBasedOnNode(exported)
+            original
           }));
-          var vars = rewired.map(({local, temp}) => t.variableDeclarator(temp, local));
           var stubs = rewired.map(({exported, local}) => markVisited(
             buildStub({
               REWIRE: t.isIdentifier(exported, defaultIdentifier) ? rewireIdentifier : t.identifier(`rewire$${exported.name}`),
@@ -45,10 +55,13 @@ export default function ({types: t}) {
               STUB: stubIdentifier
             })
           ));
-          var assignments = rewired.map(({local, temp}) => t.expressionStatement(t.assignmentExpression('=', local, temp)));
-          path.unshiftContainer('body', hoisted);
+          var assignments = rewired.map(({local, original}) => t.expressionStatement(t.assignmentExpression('=', local, original)));
+          if (tempVars.length) {
+            path.pushContainer('body', [
+              t.variableDeclaration('var', tempVars)
+            ]);
+          }
           path.pushContainer('body', [
-            t.variableDeclaration('var', vars),
             ...stubs,
             markVisited(buildRestore({RESTORE: assignments}))
           ]);
@@ -59,15 +72,15 @@ export default function ({types: t}) {
         var declaration = path.node.declaration;
         if (t.isIdentifier(declaration)) {
           // export default foo
-          exports.set(defaultIdentifier, declaration);
+          exports.push({exported: defaultIdentifier, local: declaration});
           path.replaceWith(markVisited(t.exportNamedDeclaration(null, [
             t.exportSpecifier(declaration, defaultIdentifier)
           ])));
         } else if (t.isFunctionDeclaration(declaration)) {
           //export default function () {}
           const id = declaration.id || path.scope.generateUidIdentifier('default');
-          exports.set(defaultIdentifier, id);
           declaration.id = path.scope.generateUidIdentifierBasedOnNode(declaration.id);
+          exports.push({exported: defaultIdentifier, local: id, original: declaration.id});
           path.replaceWithMultiple([
             declaration,
             markVisited(t.exportNamedDeclaration(null, [
@@ -80,7 +93,7 @@ export default function ({types: t}) {
         } else if (t.isClassDeclaration(declaration)) {
           //export default class {}
           const id = declaration.id || path.scope.generateUidIdentifier('default');
-          exports.set(defaultIdentifier, id);
+          exports.push({exported: defaultIdentifier, local: id});
           path.replaceWithMultiple([
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.classExpression(declaration.id, declaration.superClass, declaration.body, declaration.decorators || []))
@@ -92,7 +105,7 @@ export default function ({types: t}) {
         } else {
           // export default ...
           const id = path.scope.generateUidIdentifier('default');
-          exports.set(defaultIdentifier, id);
+          exports.push({exported: defaultIdentifier, local: id});
           path.replaceWithMultiple([
             t.variableDeclaration('var', [t.variableDeclarator(id, declaration)]),
             markVisited(t.exportNamedDeclaration(null, [
@@ -113,13 +126,13 @@ export default function ({types: t}) {
           if (declaration.kind === 'const') return;
           // export var foo
           declaration.declarations.forEach(({id}) => {
-            exports.set(id, id);
+            exports.push({exported: id, local: id});
           });
         } else if (t.isFunctionDeclaration(declaration)) {
           // export function foo() {}
           const id = declaration.id;
-          exports.set(id, id);
           declaration.id = path.scope.generateUidIdentifierBasedOnNode(id);
+          exports.push({exported: id, local: id, original: declaration.id});
           path.replaceWithMultiple([
             declaration,
             markVisited(t.exportNamedDeclaration(null, [
@@ -132,7 +145,7 @@ export default function ({types: t}) {
         } else if (t.isClassDeclaration(declaration)) {
           // export function class foo {}
           const id = declaration.id;
-          exports.set(id, id);
+          exports.push({exported: id, local: id});
           path.replaceWithMultiple([
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.classExpression(id, declaration.superClass, declaration.body, declaration.decorators || []))
@@ -144,7 +157,7 @@ export default function ({types: t}) {
         } else {
           // export {foo}
           path.node.specifiers.forEach(({exported, local}) => {
-            exports.set(exported, local);
+            exports.push({exported, local});
           });
         }
       }

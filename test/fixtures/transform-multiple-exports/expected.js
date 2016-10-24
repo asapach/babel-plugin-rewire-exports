@@ -16,9 +16,7 @@ export { bar as qux, baz };
 
 var whatsit = class whatsit extends foo {};
 export { whatsit };
-var _default = foo,
-    _bar2 = bar,
-    _qux = bar,
+var _qux = bar,
     _baz = baz,
     _whatsit = whatsit;
 export function rewire($stub) {
@@ -37,8 +35,8 @@ export function rewire$whatsit($stub) {
   whatsit = $stub;
 }
 export function restore() {
-  foo = _default;
-  bar = _bar2;
+  foo = _foo;
+  bar = _bar;
   bar = _qux;
   baz = _baz;
   whatsit = _whatsit;
