@@ -61,7 +61,7 @@ describe('adapter', function () {
   
   it('should call fetch', function () {
     fetchItems()
-    expect(this.spy.toHaveBeenCalledWith('/items'))
+    expect(this.spy).toHaveBeenCalledWith('/items')
   })
 })
 ```
