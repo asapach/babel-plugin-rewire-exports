@@ -67,7 +67,7 @@ describe('adapter', function () {
 ```
 
 ## Compatibility
-* :heart: Should work in modern browsers once they start implementing ES6 modules natively - for example tested in latest Edge with [experimental flags](https://blogs.windows.com/msedgedev/2016/05/17/es6-modules-and-beyond/)
+* :heart: Should work in modern browsers and Node once they start implementing ES6 modules natively - for example tested in latest Edge with [experimental flags](https://blogs.windows.com/msedgedev/2016/05/17/es6-modules-and-beyond/)
 * :sparkles: SystemJS
 * :star2: Webpack 2
 * :bug: Rollup doesn't support rewiring default exports ([rollup/rollup#1078](https://github.com/rollup/rollup/issues/1078))
