@@ -93,6 +93,8 @@ export default function ({types: t}) {
         const declaration = path.node.declaration;
         if (t.isIdentifier(declaration)) {
           // export default foo
+          let binding = path.scope.getBinding(declaration.name);
+          if (binding.kind === 'const') return; // ignore constants
           exports.push({exported: defaultIdentifier, local: declaration});
           path.replaceWith(buildNamedExport(declaration, defaultIdentifier));
         } else if (t.isFunctionDeclaration(declaration)) {
@@ -162,6 +164,8 @@ export default function ({types: t}) {
         } else {
           // export {foo}
           path.node.specifiers.forEach(({exported, local}) => {
+            let binding = path.scope.getBinding(local.name);
+            if (binding.kind === 'const') return; // ignore constants
             exports.push({exported, local});
           });
         }
