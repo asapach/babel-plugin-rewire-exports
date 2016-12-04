@@ -1,6 +1,7 @@
 # babel-plugin-rewire-exports
 
-Babel plugin for stubbing module exports. It allows to rewire the the exported values in all the importing modules.
+Babel plugin for stubbing (ES6, ES2015) module exports.
+It allows to rewire the the exported values in all the importing modules.
 Unlike [babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire) it doesn't modify the module
 internals (e.g. imports and top-level variables and functions).
 See [How it works](#how-it-works) section for implementation details.
@@ -102,7 +103,22 @@ counter++; // TypeError
 This allows for any exports to be overwritten from within the module -
 and imports will be automatically updated via their bindings.
 
-TODO: implementation details
+### Transformations
+Here's how various kinds of export declarations are transformed:
+* Literals (`export default 'foo'`) - the original value is copied to a variable to be stubbed and restored later:
+  `export {_default as default}`
+* Variables:
+  - named exports (`export var foo`, `export let bar` or `export {baz}`) are left intact,
+    but their initial values are similarly copied to temp variables.
+  - default export (`export default foo`) is converted to a named export to enable live binding:
+    `export {foo as default}`
+* Constants (`export const foo = 'bar'`) are ignored
+* Functions (`export default function () {…}` or `export function foo() {…}`)
+  are split into a function declaration and exported variable by the same name.
+  The variable is hoisted to the very top of the module to preserve existing behavior.
+* Classes (`export default class {…}` or `export class foo {…}`) are handled similar to functions
+  except the variables are not hoisted (again to preserve the existing behavior).
+* Re-exports (`export * from './foo.js'` or `export {bar} from 'baz'`) are ignored
 
 ## Installation
 

@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-rewire-exports",
   "version": "0.0.3",
-  "description": "Babel plugin for stubbing module exports",
+  "description": "Babel plugin for stubbing (ES6, ES2015) module exports",
   "main": "lib/index.js",
   "scripts": {
     "clean": "rimraf lib",
