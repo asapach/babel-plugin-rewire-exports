@@ -3,6 +3,7 @@ import template from 'babel-template';
 export default function ({types: t}) {
   const defaultIdentifier = t.identifier('default');
   const rewireIdentifier = t.identifier('rewire');
+  const restoreIdentifier = t.identifier('restore');
   const stubIdentifier = t.identifier('$stub');
   const VISITED = Symbol();
 
@@ -13,8 +14,8 @@ export default function ({types: t}) {
   `, {sourceType: 'module'});
 
   const buildRestore = template(`
-    export function restore() {
-      RESTORE
+    export function RESTORE() {
+      BODY
     }
   `, {sourceType: 'module'});
 
@@ -44,34 +45,40 @@ export default function ({types: t}) {
           }
 
           // generate temp variables to capture original values
-          var tempVars = [];
+          const tempVars = [];
           exports.filter(e => !e.original).forEach(e => {
             var temp = e.original = path.scope.generateUidIdentifierBasedOnNode(e.exported);
             tempVars.push(t.variableDeclarator(temp, e.local));
           });
 
           // generate new IDs to keep sourcemaps clean
-          var rewired = exports.map(({exported, local, original}) => ({
+          const rewired = exports.map(({exported, local, original}) => ({
             exported: t.identifier(exported.name),
             local: t.identifier(local.name),
             original: t.identifier(original.name)
           }));
 
           // generate stub functions
-          var stubs = rewired.map(({exported, local}) => markVisited(
-            buildStub({
-              REWIRE: t.isIdentifier(exported, defaultIdentifier) ? rewireIdentifier : t.identifier(`rewire$${exported.name}`),
-              LOCAL: local,
-              STUB: stubIdentifier
-            })
-          ));
+          const hasConflictingBinding = path.scope.hasOwnBinding('rewire');
+          const stubs = rewired.map(({exported, local}) => {
+            let rewire = t.isIdentifier(exported, defaultIdentifier) && !hasConflictingBinding
+              ? rewireIdentifier : t.identifier(`rewire$${exported.name}`);
+            return markVisited(
+              buildStub({
+                REWIRE: rewire,
+                LOCAL: local,
+                STUB: stubIdentifier
+              })
+            );
+          });
 
           // generate restore function
-          var assignments = rewired.map(({local, original}) => t.expressionStatement(t.assignmentExpression('=', local, original)));
+          const restore = path.scope.hasOwnBinding('restore') ? t.identifier('restore$rewire') : restoreIdentifier;
+          const assignments = rewired.map(({local, original}) => t.expressionStatement(t.assignmentExpression('=', local, original)));
 
-          var body = [
+          const body = [
             ...stubs,
-            markVisited(buildRestore({RESTORE: assignments}))
+            markVisited(buildRestore({RESTORE: restore, BODY: assignments}))
           ];
 
           if (tempVars.length) {
@@ -83,7 +90,7 @@ export default function ({types: t}) {
       },
       // export default
       ExportDefaultDeclaration: function (path, {exports, hoisted}) {
-        var declaration = path.node.declaration;
+        const declaration = path.node.declaration;
         if (t.isIdentifier(declaration)) {
           // export default foo
           exports.push({exported: defaultIdentifier, local: declaration});
@@ -124,7 +131,7 @@ export default function ({types: t}) {
         // export { foo } from './bar.js'
         if (path.node.source) return;
 
-        var declaration = path.node.declaration;
+        const declaration = path.node.declaration;
         if (t.isVariableDeclaration(declaration)) {
           // export const foo = 'bar'
           if (declaration.kind === 'const') return;

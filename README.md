@@ -2,13 +2,16 @@
 
 Babel plugin for stubbing module exports. It allows to rewire the the exported values in all the importing modules.
 Unlike [babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire) it doesn't modify the module
-internals (e.g. imports and top-level variables and functions). See [How it works](#how-it-works) section for implementation details.
+internals (e.g. imports and top-level variables and functions).
+See [How it works](#how-it-works) section for implementation details.
 
 ## Exports
-Plugin transforms module exports in such a way that they can be stubbed (or "rewired") via an API:
+Plugin transforms module exports in such a way that they can be stubbed (or "rewired") via the following API:
 * default export - plugin exports additional `rewire(stub)` function that allows to replace the original
 * named exports - for each export (e.g. `export var foo`) an additional function `rewire$foo(stub)` is exported
 * `restore()` function allows to restore the exports to their original values
+* if there are existing `rewire` or `restore` top-level identifiers, the generated exports will be named
+`rewire$default` and `restore$rewire` respectively
 
 ### Example
 
