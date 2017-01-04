@@ -2,8 +2,8 @@ export default function foo() {
   return bar();
 }
 
-export function bar() {
-  return baz;
+export function* bar() {
+  yield baz;
 }
 
 var baz = true;

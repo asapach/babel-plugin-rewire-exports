@@ -5,8 +5,8 @@ function _foo() {
 }
 
 export { foo as default };
-function _bar() {
-  return baz;
+function* _bar() {
+  yield baz;
 }
 
 export { bar };
