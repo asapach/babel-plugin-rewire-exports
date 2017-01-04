@@ -1,5 +1,9 @@
 # babel-plugin-rewire-exports
 
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Build Status][travis-image]][travis-url]
+
 Babel plugin for stubbing (ES6, ES2015) module exports.
 It allows to rewire the the exported values in all the importing modules.
 Unlike [babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire) it doesn't modify the module
@@ -151,3 +155,10 @@ require("babel-core").transform("code", {
   plugins: ["rewire-exports"]
 });
 ```
+
+[npm-image]: https://img.shields.io/npm/v/babel-plugin-rewire-exports.svg?style=flat
+[npm-url]: https://npmjs.org/package/babel-plugin-rewire-exports
+[travis-image]: https://img.shields.io/travis/asapach/babel-plugin-rewire-exports.svg?style=flat
+[travis-url]: https://travis-ci.org/asapach/babel-plugin-rewire-exports
+[downloads-image]: https://img.shields.io/npm/dm/babel-plugin-rewire-exports.svg?style=flat
+[downloads-url]: https://npmjs.org/package/babel-plugin-rewire-exports
