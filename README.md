@@ -72,6 +72,21 @@ describe('adapter', function () {
     expect(this.spy).toHaveBeenCalledWith('/items')
   })
 })
+
+//------ test if using sinon and mocha ------
+describe('adapter', function () {
+  var spy
+  beforeEach(function () {
+    spy = sinon.spy()
+    rewire(spy)
+  })
+  after(restore)
+  
+  it('should call fetch', function () {
+    fetchItems()
+    expect(spy.withArgs('/items').calledOnce).to.be.true
+  })
+})
 ```
 
 ## Compatibility
