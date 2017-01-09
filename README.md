@@ -61,6 +61,7 @@ export function fetchItems() {
 import {rewire, restore} from './fetch.js'
 import {fetchItems} from './adapter.js'
 
+// Jasmine example
 describe('adapter', function () {
   beforeEach(function () {
     rewire(this.spy = jasmine.createSpy('fetch'))
@@ -70,6 +71,21 @@ describe('adapter', function () {
   it('should call fetch', function () {
     fetchItems()
     expect(this.spy).toHaveBeenCalledWith('/items')
+  })
+})
+
+// Mocha/Chai and Sinon example
+describe('adapter', function () {
+  var spy
+
+  beforeEach(function () {
+    rewire(spy = sinon.spy())
+  })
+  after(restore)
+  
+  it('should call fetch', function () {
+    fetchItems()
+    expect(spy.withArgs('/items').calledOnce).to.be.true
   })
 })
 ```
