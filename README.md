@@ -61,6 +61,7 @@ export function fetchItems() {
 import {rewire, restore} from './fetch.js'
 import {fetchItems} from './adapter.js'
 
+// Jasmine example
 describe('adapter', function () {
   beforeEach(function () {
     rewire(this.spy = jasmine.createSpy('fetch'))
@@ -73,12 +74,12 @@ describe('adapter', function () {
   })
 })
 
-//------ test if using sinon and mocha ------
+// Mocha/Chai and Sinon example
 describe('adapter', function () {
   var spy
+
   beforeEach(function () {
-    spy = sinon.spy()
-    rewire(spy)
+    rewire(spy = sinon.spy())
   })
   after(restore)
   
