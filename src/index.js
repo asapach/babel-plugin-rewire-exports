@@ -5,7 +5,7 @@ export default function ({types: t}) {
   const rewireIdentifier = t.identifier('rewire');
   const restoreIdentifier = t.identifier('restore');
   const stubIdentifier = t.identifier('$stub');
-  const VISITED = Symbol();
+  const VISITED = Symbol('visited');
 
   const buildStub = template(`
     export function REWIRE(STUB) {
@@ -95,7 +95,7 @@ export default function ({types: t}) {
         const binding = isIdentifier && path.scope.getBinding(declaration.name);
         if (isIdentifier && binding) {
           // export default foo
-          if (binding.kind === 'const') return; // ignore constants
+          if (['const', 'module'].includes(binding.kind)) return; // ignore constants and imports
           exports.push({exported: defaultIdentifier, local: declaration});
           path.replaceWith(buildNamedExport(declaration, defaultIdentifier));
         } else if (t.isFunctionDeclaration(declaration)) {
@@ -175,7 +175,7 @@ export default function ({types: t}) {
               node.local = id;
               return;
             }
-            if (binding.kind === 'const') return; // ignore constants and undefined vars
+            if (['const', 'module'].includes(binding.kind)) return; // ignore constants and imports
             exports.push({exported, local});
           });
         }

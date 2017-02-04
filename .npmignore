@@ -3,3 +3,6 @@
 /test
 /.idea
 *.log
+.travis.yml
+.eslintrc.yml
+yarn.lock

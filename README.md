@@ -136,9 +136,9 @@ Here's how various kinds of export declarations are transformed:
 * Functions (`export default function () {…}` or `export function foo() {…}`)
   are split into a function declaration and exported variable by the same name.
   The variable is hoisted to the very top of the module to preserve existing behavior.
-* Classes (`export default class {…}` or `export class foo {…}`) are handled similar to functions
+* Classes (`export default class {…}` or `export class foo {…}`) are handled similarly to functions
   except the variables are not hoisted (again to preserve the existing behavior).
-* Re-exports (`export * from './foo.js'` or `export {bar} from 'baz'`) are ignored
+* Re-exports (`export * from './foo.js'` or `export {bar} from 'baz'`) are ignored, as well as exports of imported bindings
 
 ## Installation
 
