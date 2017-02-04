@@ -95,7 +95,7 @@ export default function ({types: t}) {
         const binding = isIdentifier && path.scope.getBinding(declaration.name);
         if (isIdentifier && binding) {
           // export default foo
-          if (['const', 'module'].includes(binding.kind)) return; // ignore constants and imports
+          if (~['const', 'module'].indexOf(binding.kind)) return; // ignore constants and imports
           exports.push({exported: defaultIdentifier, local: declaration});
           path.replaceWith(buildNamedExport(declaration, defaultIdentifier));
         } else if (t.isFunctionDeclaration(declaration)) {
@@ -175,7 +175,7 @@ export default function ({types: t}) {
               node.local = id;
               return;
             }
-            if (['const', 'module'].includes(binding.kind)) return; // ignore constants and imports
+            if (~['const', 'module'].indexOf(binding.kind)) return; // ignore constants and imports
             exports.push({exported, local});
           });
         }
