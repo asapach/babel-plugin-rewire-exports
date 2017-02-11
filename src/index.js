@@ -93,9 +93,10 @@ export default function ({types: t}) {
         const declaration = path.node.declaration;
         const isIdentifier = t.isIdentifier(declaration);
         const binding = isIdentifier && path.scope.getBinding(declaration.name);
-        if (isIdentifier && binding) {
+        // skip undefined, globals and imports
+        if (isIdentifier && binding && binding.kind !== 'module') {
           // export default foo
-          if (~['const', 'module'].indexOf(binding.kind)) return; // ignore constants and imports
+          if (binding.kind === 'const') return; // ignore constants
           exports.push({exported: defaultIdentifier, local: declaration});
           path.replaceWith(buildNamedExport(declaration, defaultIdentifier));
         } else if (t.isFunctionDeclaration(declaration)) {
@@ -167,15 +168,15 @@ export default function ({types: t}) {
           path.node.specifiers.forEach(node => {
             const {exported, local} = node;
             const binding = path.scope.getBinding(local.name);
-            if (!binding) {
-              // undefined or global variable
+            if (!binding || binding.kind === 'module') {
+              // undefined, global variable or import
               const id = path.scope.generateUidIdentifier(local.name);
               exports.push({exported: exported, local: id});
               path.insertAfter(t.variableDeclaration('var', [t.variableDeclarator(id, local)]));
               node.local = id;
               return;
             }
-            if (~['const', 'module'].indexOf(binding.kind)) return; // ignore constants and imports
+            if (binding.kind === 'const') return; // ignore constants
             exports.push({exported, local});
           });
         }
