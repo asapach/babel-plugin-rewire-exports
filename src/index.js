@@ -93,10 +93,10 @@ export default function ({types: t}) {
         const declaration = path.node.declaration;
         const isIdentifier = t.isIdentifier(declaration);
         const binding = isIdentifier && path.scope.getBinding(declaration.name);
-        // skip undefined, globals and imports
-        if (isIdentifier && binding && binding.kind !== 'module') {
+        const isImmutable = !binding || ~['const', 'module'].indexOf(binding.kind);
+        // skip undefined, globals, const and imports
+        if (isIdentifier && !isImmutable) {
           // export default foo
-          if (binding.kind === 'const') return; // ignore constants
           exports.push({exported: defaultIdentifier, local: declaration});
           path.replaceWith(buildNamedExport(declaration, defaultIdentifier));
         } else if (t.isFunctionDeclaration(declaration)) {
@@ -168,8 +168,9 @@ export default function ({types: t}) {
           path.node.specifiers.forEach(node => {
             const {exported, local} = node;
             const binding = path.scope.getBinding(local.name);
-            if (!binding || binding.kind === 'module') {
-              // undefined, global variable or import
+            const isImmutable = !binding || ~['const', 'module'].indexOf(binding.kind);
+            if (isImmutable) {
+              // undefined, globals, const and imports
               const id = path.scope.generateUidIdentifier(local.name);
               exports.push({exported: exported, local: id});
               path.insertAfter(t.variableDeclaration('var', [t.variableDeclarator(id, local)]));
