@@ -139,6 +139,7 @@ Here's how various kinds of export declarations are transformed:
 * Classes (`export default class {…}` or `export class foo {…}`) are handled similarly to functions
   except the variables are not hoisted (again to preserve the existing behavior).
 * Re-exports (`export * from './foo.js'` or `export {bar} from 'baz'`) are ignored.
+* Immutable values such as `undefined`, *globals*, *constants* and *imports* are copied similar to literals. 
 
 ## Installation
 

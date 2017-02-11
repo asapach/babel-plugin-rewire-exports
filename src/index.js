@@ -177,7 +177,6 @@ export default function ({types: t}) {
               node.local = id;
               return;
             }
-            if (binding.kind === 'const') return; // ignore constants
             exports.push({exported, local});
           });
         }
