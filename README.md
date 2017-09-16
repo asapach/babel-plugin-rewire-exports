@@ -91,9 +91,16 @@ describe('adapter', function () {
 ```
 
 ## Compatibility
-* :heart: Should work in modern browsers and Node once they start implementing ES6 modules natively - for example tested in latest Edge with [experimental flags](https://blogs.windows.com/msedgedev/2016/05/17/es6-modules-and-beyond/)
+* :heart: Works with modern browsers:
+  * :clock6: Safari 10.1+
+  * :watermelon: Chrome 61+
+  * :cat: Firefox behind [flags](https://developer.mozilla.org/en-US/Firefox/Experimental_features#JavaScript)
+  * :gem: Edge behind [flags](https://blogs.windows.com/msedgedev/2016/05/17/es6-modules-and-beyond/)
+* :green_apple: Node:
+  * [`@std/esm`](https://github.com/standard-things/esm)
+  * `8.5.0+` behind [`--experimental-modules` flag](https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V8.md#8.5.0)
 * :sparkles: SystemJS
-* :star2: Webpack 2
+* :star2: Webpack 2+
 * :boom: Rollup - requires [v0.38+](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#0380)
 * :package: Seems to work with CommonJS and AMD (including bundling with webpack)
 
