@@ -18,7 +18,14 @@
     "babel",
     "plugin",
     "rewire",
-    "babel-plugin"
+    "babel-plugin",
+    "webpack",
+    "rollup",
+    "systemjs",
+    "browser",
+    "node",
+    "jest",
+    "karma"
   ],
   "author": "Aliaksei Sapach <dreamsonic@tut.by>",
   "license": "MIT",

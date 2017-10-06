@@ -102,7 +102,11 @@ describe('adapter', function () {
 * :sparkles: SystemJS
 * :star2: Webpack 2+
 * :boom: Rollup - requires [v0.38+](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#0380)
-* :package: Seems to work with CommonJS and AMD (including bundling with webpack)
+* :package: Works with CommonJS, including running in Node and bundling with webpack/browserify:
+  * Use either [`es2015`](https://babeljs.io/docs/plugins/preset-es2015/) or [`env`](https://babeljs.io/docs/plugins/preset-env/) preset
+  * When specifying `plugins` directly make sure that `"rewire-exports"` goes
+    before ["transform-es2015-modules-commonjs"](https://babeljs.io/docs/plugins/transform-es2015-modules-commonjs/)
+  * Works with [:black_joker:Jest](https://facebook.github.io/jest/) using [babel-jest](https://github.com/facebook/jest/tree/master/packages/babel-jest)
 
 ## How it works
 [In ES6, imports are live read-only views on exported values](
