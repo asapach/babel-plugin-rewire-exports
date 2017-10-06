@@ -7,7 +7,8 @@ import plugin from '../src';
 describe('issues', () => {
   it('#1 undefined wire', () => {
       const options = {
-        presets: ["es2015"],
+        babelrc: false,
+        presets: ['es2015'],
         plugins: [plugin]
       };
 
