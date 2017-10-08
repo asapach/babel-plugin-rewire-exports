@@ -105,7 +105,7 @@ describe('adapter', function () {
 * :package: Works with CommonJS, including running in Node and bundling with webpack/browserify:
   * Use either [`es2015`](https://babeljs.io/docs/plugins/preset-es2015/) or [`env`](https://babeljs.io/docs/plugins/preset-env/) preset
   * When specifying `plugins` directly make sure that `"rewire-exports"` goes
-    before ["transform-es2015-modules-commonjs"](https://babeljs.io/docs/plugins/transform-es2015-modules-commonjs/)
+    before [`"transform-es2015-modules-commonjs"`](https://babeljs.io/docs/plugins/transform-es2015-modules-commonjs/)
   * Works with [:black_joker: Jest](https://facebook.github.io/jest/) using [babel-jest](https://github.com/facebook/jest/tree/master/packages/babel-jest)
 
 ## How it works
