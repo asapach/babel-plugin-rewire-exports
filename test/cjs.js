@@ -6,15 +6,15 @@ import plugin from '../src';
 
 describe('cjs modules should work', () => {
   it('when plugin is first', () => {
-      const options = {
-        babelrc: false,
-        plugins: [plugin, 'transform-es2015-modules-commonjs']
-      };
+    const options = {
+      babelrc: false,
+      plugins: [plugin, 'transform-es2015-modules-commonjs']
+    };
 
-      const actual = transformFileSync('./test/cjs/actual.js', options).code;
-      const expected = fs.readFileSync('./test/cjs/expected.js').toString();
+    const actual = transformFileSync('./test/cjs/actual.js', options).code;
+    const expected = fs.readFileSync('./test/cjs/expected.js').toString();
 
-      assert.equal(trim(actual), trim(expected));
+    assert.equal(trim(actual), trim(expected));
   });
 
   it('when using es2015 preset', () => {

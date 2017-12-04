@@ -12,10 +12,10 @@ describe('issues', () => {
   };
 
   it('#1 undefined wire', () => {
-      const actual = transformFileSync('./test/issues/1/actual.js', options).code;
-      const expected = fs.readFileSync('./test/issues/1/expected.js').toString();
+    const actual = transformFileSync('./test/issues/1/actual.js', options).code;
+    const expected = fs.readFileSync('./test/issues/1/expected.js').toString();
 
-      assert.equal(trim(actual), trim(expected));
+    assert.equal(trim(actual), trim(expected));
   });
 
   it('#5 Explicit re-export is not working', () => {
@@ -23,5 +23,5 @@ describe('issues', () => {
     const expected = fs.readFileSync('./test/issues/5/expected.js').toString();
 
     assert.equal(trim(actual), trim(expected));
-});
+  });
 });
