@@ -1,7 +1,7 @@
 import { foo } from './bar.js';
 foo.baz = 'qux';
-export { _foo as foo };
 var _foo = foo;
+export { _foo as foo };
 var _default = foo;
 export { _default as default };
 var _foo2 = _foo,

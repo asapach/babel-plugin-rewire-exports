@@ -173,7 +173,7 @@ export default function ({types: t}) {
               // undefined, globals, const and imports
               const id = path.scope.generateUidIdentifier(local.name);
               exports.push({exported: exported, local: id});
-              path.insertAfter(t.variableDeclaration('var', [t.variableDeclarator(id, local)]));
+              path.insertBefore(t.variableDeclaration('var', [t.variableDeclarator(id, local)]));
               node.local = id;
               return;
             }

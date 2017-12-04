@@ -16,11 +16,11 @@ export { bar as qux, baz };
 
 var whatsit = class whatsit extends foo {};
 export { whatsit };
+var _whatnot = whatnot;
+var _undefined = undefined;
 
 
 export { _whatnot as whatnot, _undefined as undef };
-var _undefined = undefined;
-var _whatnot = whatnot;
 var _qux = bar,
     _baz = baz,
     _whatsit = whatsit,
