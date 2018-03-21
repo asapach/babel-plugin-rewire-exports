@@ -5,7 +5,7 @@
 [![Build Status][travis-image]][travis-url]
 
 Babel plugin for stubbing (ES6, ES2015) module exports.
-It allows to rewire the the exported values in all the importing modules.
+It allows to rewire the exported values in all the importing modules.
 Unlike [babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire) it doesn't modify the module
 internals (e.g. imports and top-level variables and functions).
 See [How it works](#how-it-works) section for implementation details.
