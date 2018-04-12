@@ -7,7 +7,7 @@
     "clean": "rimraf lib",
     "build": "babel src -d lib",
     "lint": "eslint src",
-    "test": "npm run lint && mocha --compilers js:babel-register",
+    "test": "npm run lint && mocha --require babel-core/register",
     "test:watch": "npm run test -- --watch",
     "prepublish": "npm run clean && npm run build"
   },
