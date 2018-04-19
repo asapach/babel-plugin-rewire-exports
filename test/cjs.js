@@ -1,6 +1,6 @@
 import fs from 'fs';
 import assert from 'assert';
-import { transformFileSync } from 'babel-core';
+import { transformFileSync } from '@babel/core';
 import { trim } from './util';
 import plugin from '../src';
 
@@ -8,7 +8,7 @@ describe('cjs modules should work', () => {
   it('when plugin is first', () => {
     const options = {
       babelrc: false,
-      plugins: [plugin, 'transform-es2015-modules-commonjs']
+      plugins: [plugin, '@babel/plugin-transform-modules-commonjs']
     };
 
     const actual = transformFileSync('./test/cjs/actual.js', options).code;
@@ -20,7 +20,7 @@ describe('cjs modules should work', () => {
   it('when using es2015 preset', () => {
     const options = {
       babelrc: false,
-      presets: ['es2015'],
+      presets: ['@babel/preset-es2015'],
       plugins: [plugin]
     };
 

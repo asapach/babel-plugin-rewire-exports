@@ -1,5 +1,4 @@
 export const foo = 'bar';
-
 const baz = false;
 var _baz = baz;
 export { _baz as baz };

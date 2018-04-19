@@ -7,9 +7,11 @@ function _foo() {
 }
 
 export { foo as default };
+
 function _baz() {
   return false;
 }
+
 export { baz };
 export function rewire($stub) {
   foo = $stub;

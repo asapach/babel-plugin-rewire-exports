@@ -2,6 +2,7 @@ var _default = class {
   constructor() {
     this.foo = 'bar';
   }
+
 };
 
 export { _default as default };

@@ -6,17 +6,19 @@ Object.defineProperty(exports, "__esModule", {
 exports.rewire = rewire;
 exports.rewire$baz = rewire$baz;
 exports.restore = restore;
+exports.baz = exports.default = void 0;
 var foo = _foo,
     baz = _baz;
+exports.baz = baz;
+exports.default = foo;
+
 function _foo() {
   return null;
 }
 
-exports.default = foo;
 function _baz() {
   return false;
 }
-exports.baz = baz;
 
 function rewire($stub) {
   exports.default = foo = $stub;

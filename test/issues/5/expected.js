@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.say = undefined;
 exports.rewire$say = rewire$say;
 exports.restore = restore;
+exports.say = void 0;
 
-var _module = require('./module1');
+var _module = require("./module1");
 
 var _say = _module.say;
 exports.say = _say;

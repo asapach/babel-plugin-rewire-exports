@@ -1,25 +1,23 @@
 var foo = _foo,
     bar = _bar;
+
 function _foo() {
   return bar();
 }
 
 export { foo as default };
+
 function* _bar() {
   yield baz;
 }
 
 export { bar };
 var baz = true;
-
 export { bar as qux, baz };
-
 var whatsit = class whatsit extends foo {};
 export { whatsit };
 var _whatnot = whatnot;
 var _undefined = undefined;
-
-
 export { _whatnot as whatnot, _undefined as undef };
 var _qux = bar,
     _baz = baz,
