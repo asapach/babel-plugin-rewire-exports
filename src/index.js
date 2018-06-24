@@ -130,7 +130,7 @@ export default function ({types: t}) {
         }
       },
       // export {}
-      ExportNamedDeclaration (path, {exports, hoisted}) {
+      ExportNamedDeclaration (path, {exports, hoisted, opts}) {
         if (path.node[VISITED]) return;
         // export { foo } from './bar.js'
         if (path.node.source) return;
@@ -138,7 +138,13 @@ export default function ({types: t}) {
         const declaration = path.node.declaration;
         if (t.isVariableDeclaration(declaration)) {
           // export const foo = 'bar'
-          if (declaration.kind === 'const') return; // ignore constants
+          if (declaration.kind === 'const') {
+            if (opts.unsafeConst) {
+              declaration.kind = 'let'; // convert const to let
+            } else {
+              return; // ignore constants
+            }
+          }
           // export var foo
           declaration.declarations.forEach(({id}) => {
             exports.push({exported: id, local: id});
