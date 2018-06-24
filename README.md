@@ -94,8 +94,8 @@ describe('adapter', function () {
 * :heart: Works with modern browsers:
   * :clock6: Safari 10.1+
   * :watermelon: Chrome 61+
-  * :cat: Firefox behind 60+
-  * :gem: Edge behind 16+
+  * :cat: Firefox 60+
+  * :gem: Edge 16+
 * :green_apple: Node:
   * [`@std/esm`](https://github.com/standard-things/esm)
   * `8.5.0+` behind [`--experimental-modules` flag](https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V8.md#8.5.0)
