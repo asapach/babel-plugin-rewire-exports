@@ -3,7 +3,6 @@ var _foo = foo;
 export { _foo as foo };
 var _default = foo;
 export { _default as default };
-
 export let bar = 'baz';
 var _foo2 = _foo,
     _default2 = _default,

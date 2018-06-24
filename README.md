@@ -94,8 +94,8 @@ describe('adapter', function () {
 * :heart: Works with modern browsers:
   * :clock6: Safari 10.1+
   * :watermelon: Chrome 61+
-  * :cat: Firefox behind 60+
-  * :gem: Edge behind 16+
+  * :cat: Firefox 60+
+  * :gem: Edge 16+
 * :green_apple: Node:
   * [`@std/esm`](https://github.com/standard-things/esm)
   * `8.5.0+` behind [`--experimental-modules` flag](https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V8.md#8.5.0)
@@ -103,9 +103,9 @@ describe('adapter', function () {
 * :star2: Webpack 2+
 * :boom: Rollup
 * :package: Works with CommonJS, including running in Node and bundling with webpack/browserify:
-  * Use either [`es2015`](https://babeljs.io/docs/plugins/preset-es2015/) or [`env`](https://babeljs.io/docs/plugins/preset-env/) preset
+  * Use either [`es2015`](https://babeljs.io/docs/plugins/preset-es2015/) or [`env`](https://babeljs.io/docs/en/babel-preset-env/) preset
   * When specifying `plugins` directly make sure that `"rewire-exports"` goes
-    before [`"transform-es2015-modules-commonjs"`](https://babeljs.io/docs/plugins/transform-es2015-modules-commonjs/)
+    before [`"transform-modules-commonjs"`](https://babeljs.io/docs/en/next/babel-plugin-transform-modules-commonjs)
   * Works with [:black_joker: Jest](https://facebook.github.io/jest/) using [babel-jest](https://github.com/facebook/jest/tree/master/packages/babel-jest)
 
 ## How it works
