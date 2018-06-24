@@ -94,14 +94,14 @@ describe('adapter', function () {
 * :heart: Works with modern browsers:
   * :clock6: Safari 10.1+
   * :watermelon: Chrome 61+
-  * :cat: Firefox behind [flags](https://developer.mozilla.org/en-US/Firefox/Experimental_features#JavaScript)
-  * :gem: Edge behind [flags](https://blogs.windows.com/msedgedev/2016/05/17/es6-modules-and-beyond/)
+  * :cat: Firefox behind 60+
+  * :gem: Edge behind 16+
 * :green_apple: Node:
   * [`@std/esm`](https://github.com/standard-things/esm)
   * `8.5.0+` behind [`--experimental-modules` flag](https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V8.md#8.5.0)
 * :sparkles: SystemJS
 * :star2: Webpack 2+
-* :boom: Rollup - requires [v0.38+](https://github.com/rollup/rollup/blob/master/CHANGELOG.md#0380)
+* :boom: Rollup
 * :package: Works with CommonJS, including running in Node and bundling with webpack/browserify:
   * Use either [`es2015`](https://babeljs.io/docs/plugins/preset-es2015/) or [`env`](https://babeljs.io/docs/plugins/preset-env/) preset
   * When specifying `plugins` directly make sure that `"rewire-exports"` goes
@@ -143,7 +143,8 @@ Here's how various kinds of export declarations are transformed:
     but their initial values are similarly copied to temp variables.
   - default export (`export default foo`) is converted to a named export to enable live binding:
     `export {foo as default}`
-* Constants (`export const foo = 'bar'`) are ignored
+* Constants (`export const foo = 'bar'`) are ignored by default,
+  but you can use `unsafeConst` [option](#options) to convert `const` to `let` in order to enable the transformation.
 * Functions (`export default function () {…}` or `export function foo() {…}`)
   are split into a function declaration and exported variable by the same name.
   The variable is hoisted to the very top of the module to preserve existing behavior.
@@ -165,8 +166,18 @@ $ npm install babel-plugin-rewire-exports
 **.babelrc**
 
 ```javascript
+// without options
 {
   "plugins": ["rewire-exports"]
+}
+
+// with options
+{
+  "plugins": [
+    ["rewire-exports", {
+      "unsafeConst": true
+    }]
+  ]
 }
 ```
 
@@ -183,6 +194,16 @@ require("babel-core").transform("code", {
   plugins: ["rewire-exports"]
 });
 ```
+
+## Options
+
+### `unsafeConst`
+`boolean`, defaults to `false`.
+
+Constants cannot be rewired, because the plugin relies on variables being assign-able in order to work.
+However setting `unsafeConst: true` will convert `export const foo = 'bar'` to `export let foo = 'bar'`.
+This will allow to treat named constant exports as a regular variables.
+This is *potentially unsafe* if your code relies on constants being read-only.
 
 [npm-image]: https://img.shields.io/npm/v/babel-plugin-rewire-exports.svg?style=flat
 [npm-url]: https://npmjs.org/package/babel-plugin-rewire-exports

@@ -24,4 +24,17 @@ describe('issues', () => {
 
     assert.equal(trim(actual), trim(expected));
   });
+
+  it('#6 Fail to rewire named exported constant functions', () => {
+    const options = {
+      babelrc: false,
+      plugins: [[plugin, {
+        unsafeConst: true
+      }]]
+    };
+    const actual = transformFileSync('./test/issues/6/actual.js', options).code;
+    const expected = fs.readFileSync('./test/issues/6/expected.js').toString();
+
+    assert.equal(trim(actual), trim(expected));
+  });
 });
