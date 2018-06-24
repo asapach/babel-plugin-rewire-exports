@@ -10,6 +10,9 @@ Unlike [babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire)
 internals (e.g. imports and top-level variables and functions).
 See [How it works](#how-it-works) section for implementation details.
 
+> The `master` branch targets Babel v7 (currently in beta).
+[`0.x` branch](https://github.com/asapach/babel-plugin-rewire-exports/tree/0.x) supports Babel v6.
+
 ## Exports
 Plugin transforms module exports in such a way that they can be stubbed (or "rewired") via the following API:
 * default export - plugin exports additional `rewire(stub)` function that allows to replace the original
