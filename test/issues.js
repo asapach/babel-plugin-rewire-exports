@@ -7,7 +7,7 @@ import plugin from '../src';
 describe('issues', () => {
   const options = {
     babelrc: false,
-    presets: ['@babel/preset-es2015'],
+    presets: ['@babel/preset-env'],
     plugins: [plugin]
   };
 
