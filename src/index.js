@@ -33,11 +33,11 @@ export default function ({types: t}) {
   return {
     visitor: {
       Program: {
-        enter (path, state) {
+        enter(path, state) {
           state.exports = [];
           state.hoisted = [];
         },
-        exit (path, {exports, hoisted}) {
+        exit(path, {exports, hoisted}) {
           if (!exports.length) return;
           // add hoisted variables to the top
           if (hoisted.length) {
@@ -89,7 +89,7 @@ export default function ({types: t}) {
         }
       },
       // export default
-      ExportDefaultDeclaration (path, {exports, hoisted}) {
+      ExportDefaultDeclaration(path, {exports, hoisted}) {
         const declaration = path.node.declaration;
         const isIdentifier = t.isIdentifier(declaration);
         const binding = isIdentifier && path.scope.getBinding(declaration.name);
@@ -130,7 +130,7 @@ export default function ({types: t}) {
         }
       },
       // export {}
-      ExportNamedDeclaration (path, {exports, hoisted, opts}) {
+      ExportNamedDeclaration(path, {exports, hoisted, opts}) {
         if (path.node[VISITED]) return;
         // export { foo } from './bar.js'
         if (path.node.source) return;
@@ -145,9 +145,35 @@ export default function ({types: t}) {
               return; // ignore constants
             }
           }
-          // export var foo
           declaration.declarations.forEach(({id}) => {
-            exports.push({exported: id, local: id});
+            if (t.isIdentifier(id)) {
+              // export var foo
+              exports.push({exported: id, local: id});
+            } else if (t.isArrayPattern(id)) {
+              // export var [foo, bar, ...baz] = qux;
+              id.elements.forEach(e => {
+                if (t.isIdentifier(e)) {
+                  exports.push({exported: e, local: e});
+                } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
+                  const id = e.argument;
+                  exports.push({exported: id, local: id});
+                } else if (t.isAssignmentPattern(e) && t.isIdentifier(e.left)) {
+                  const id = e.left;
+                  exports.push({exported: id, local: id});
+                }
+              });
+            } else if (t.isObjectPattern(id)) {
+              // export var {foo, bar, ...baz} = qux;
+              id.properties.forEach(e => {
+                if (t.isObjectProperty(e)) {
+                  const id = e.key;
+                  exports.push({exported: id, local: id});
+                } else if (t.isRestProperty(e) && t.isIdentifier(e.argument)) {
+                  const id = e.argument;
+                  exports.push({exported: id, local: id});
+                }
+              });
+            }
           });
         } else if (t.isFunctionDeclaration(declaration)) {
           // export function foo() {}
