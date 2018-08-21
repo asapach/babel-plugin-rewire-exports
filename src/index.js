@@ -168,7 +168,7 @@ export default function ({types: t}) {
                 if (t.isObjectProperty(e)) {
                   const id = e.key;
                   exports.push({exported: id, local: id});
-                } else if (t.isRestProperty(e) && t.isIdentifier(e.argument)) {
+                } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
                   const id = e.argument;
                   exports.push({exported: id, local: id});
                 }
