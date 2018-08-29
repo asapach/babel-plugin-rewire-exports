@@ -38,13 +38,13 @@
   },
   "homepage": "https://github.com/asapach/babel-plugin-rewire-exports#readme",
   "dependencies": {
-    "@babel/template": "7 || ^7.0.0-beta"
+    "@babel/template": "7"
   },
   "devDependencies": {
-    "@babel/cli": "7 || ^7.0.0-beta",
-    "@babel/core": "7 || ^7.0.0-beta",
-    "@babel/preset-env": "7 || ^7.0.0-beta",
-    "@babel/register": "7 || ^7.0.0-beta",
+    "@babel/cli": "7",
+    "@babel/core": "7",
+    "@babel/preset-env": "7",
+    "@babel/register": "7",
     "eslint": "5",
     "mocha": "5",
     "rimraf": "^2.5.4"
