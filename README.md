@@ -10,7 +10,7 @@ Unlike [babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire)
 internals (e.g. imports and top-level variables and functions).
 See [How it works](#how-it-works) section for implementation details.
 
-> The `master` branch targets Babel v7 (currently in beta).
+> The `master` branch targets Babel v7.
 [`0.x` branch](https://github.com/asapach/babel-plugin-rewire-exports/tree/0.x) supports Babel v6.
 
 ## Exports
@@ -108,7 +108,7 @@ describe('adapter', function () {
 * :package: Works with CommonJS, including running in Node and bundling with webpack/browserify:
   * Use [`env`](https://babeljs.io/docs/en/babel-preset-env/) preset
   * When specifying `plugins` directly make sure that `"rewire-exports"` goes
-    before [`"transform-modules-commonjs"`](https://babeljs.io/docs/en/next/babel-plugin-transform-modules-commonjs)
+    before [`"@babel/plugin-transform-modules-commonjs"`](https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs)
   * Works with [:black_joker: Jest](https://jestjs.io/) using [babel-jest](https://github.com/facebook/jest/tree/master/packages/babel-jest)
 
 ## How it works
@@ -193,7 +193,7 @@ $ babel --plugins rewire-exports script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["rewire-exports"]
 });
 ```
