@@ -148,18 +148,18 @@ export default function ({types: t}) {
           declaration.declarations.forEach(({id}) => {
             if (t.isIdentifier(id)) {
               // export var foo
-              exports.push({exported: id, local: id});
+              exports.push({exported: t.cloneNode(id), local: id});
             } else if (t.isArrayPattern(id)) {
               // export var [foo, bar, ...baz] = qux;
               id.elements.forEach(e => {
                 if (t.isIdentifier(e)) {
-                  exports.push({exported: e, local: e});
+                  exports.push({exported: t.cloneNode(e), local: e});
                 } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
                   const id = e.argument;
-                  exports.push({exported: id, local: id});
+                  exports.push({exported: t.cloneNode(id), local: id});
                 } else if (t.isAssignmentPattern(e) && t.isIdentifier(e.left)) {
                   const id = e.left;
-                  exports.push({exported: id, local: id});
+                  exports.push({exported: t.cloneNode(id), local: id});
                 }
               });
             } else if (t.isObjectPattern(id)) {
@@ -167,10 +167,10 @@ export default function ({types: t}) {
               id.properties.forEach(e => {
                 if (t.isObjectProperty(e)) {
                   const id = e.key;
-                  exports.push({exported: id, local: id});
+                  exports.push({exported: t.cloneNode(id), local: id});
                 } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
                   const id = e.argument;
-                  exports.push({exported: id, local: id});
+                  exports.push({exported: t.cloneNode(id), local: id});
                 }
               });
             }
@@ -179,7 +179,7 @@ export default function ({types: t}) {
           // export function foo() {}
           const id = declaration.id;
           declaration.id = path.scope.generateUidIdentifierBasedOnNode(id);
-          exports.push({exported: id, local: id, original: declaration.id});
+          exports.push({exported: t.cloneNode(id), local: id, original: declaration.id});
           path.replaceWithMultiple([
             declaration,
             buildNamedExport(id, id)
@@ -188,7 +188,7 @@ export default function ({types: t}) {
         } else if (t.isClassDeclaration(declaration)) {
           // export function class foo {}
           const id = declaration.id;
-          exports.push({exported: id, local: id});
+          exports.push({exported: t.cloneNode(id), local: id});
           path.replaceWithMultiple([
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.classExpression(id, declaration.superClass, declaration.body, declaration.decorators || []))
@@ -204,7 +204,7 @@ export default function ({types: t}) {
             if (isImmutable) {
               // undefined, globals, const and imports
               const id = path.scope.generateUidIdentifier(local.name);
-              exports.push({exported: exported, local: id});
+              exports.push({exported, local: id});
               path.insertBefore(t.variableDeclaration('var', [t.variableDeclarator(id, local)]));
               node.local = id;
               return;

@@ -37,4 +37,19 @@ describe('issues', () => {
 
     assert.equal(trim(actual), trim(expected));
   });
+
+  it('#13 Wrong names are exported', () => {
+    const options = {
+      babelrc: false,
+      presets: [[
+        '@babel/preset-env',
+        { modules: false }
+      ]],
+      plugins: [plugin]
+    };
+    const actual = transformFileSync('./test/issues/13/actual.js', options).code;
+    const expected = fs.readFileSync('./test/issues/13/expected.js').toString();
+
+    assert.equal(trim(actual), trim(expected));
+  });
 });
