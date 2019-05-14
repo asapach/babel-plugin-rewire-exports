@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.rewire = rewire;
 exports.rewire$baz = rewire$baz;
 exports.restore = restore;
-exports.baz = exports.default = void 0;
+exports.baz = exports["default"] = void 0;
 var foo = _foo,
     baz = _baz;
 exports.baz = baz;
-exports.default = foo;
+exports["default"] = foo;
 
 function _foo() {
   return null;
@@ -21,7 +21,7 @@ function _baz() {
 }
 
 function rewire($stub) {
-  exports.default = foo = $stub;
+  exports["default"] = foo = $stub;
 }
 
 function rewire$baz($stub) {
@@ -29,6 +29,6 @@ function rewire$baz($stub) {
 }
 
 function restore() {
-  exports.default = foo = _foo;
+  exports["default"] = foo = _foo;
   exports.baz = baz = _baz;
 }

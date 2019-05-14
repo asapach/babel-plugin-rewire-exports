@@ -46,7 +46,7 @@
     "@babel/preset-env": "7",
     "@babel/register": "7",
     "eslint": "5",
-    "mocha": "5",
-    "rimraf": "^2.5.4"
+    "mocha": "6",
+    "rimraf": "2"
   }
 }
