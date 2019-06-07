@@ -89,12 +89,16 @@ export default function ({types: t}) {
         }
       },
       // export default
-      ExportDefaultDeclaration(path, {exports, hoisted}) {
+      ExportDefaultDeclaration(path, {exports, hoisted, opts}) {
         const declaration = path.node.declaration;
         const isIdentifier = t.isIdentifier(declaration);
         const binding = isIdentifier && path.scope.getBinding(declaration.name);
-        const isImmutable = !binding || ~['const', 'module'].indexOf(binding.kind);
-        // skip undefined, globals, const and imports
+        if (opts.unsafeConst && binding && binding.kind === 'const') {
+          // allow to rewire constants
+          binding.kind = 'let';
+          binding.path.parent.kind = 'let';
+        }
+        const isImmutable = !binding || ['const', 'module'].includes(binding.kind);
         if (isIdentifier && !isImmutable) {
           // export default foo
           exports.push({exported: defaultIdentifier, local: declaration});
@@ -186,7 +190,7 @@ export default function ({types: t}) {
           ]);
           hoisted.push(t.variableDeclarator(id, declaration.id));
         } else if (t.isClassDeclaration(declaration)) {
-          // export function class foo {}
+          // export class Foo {}
           const id = declaration.id;
           exports.push({exported: t.cloneNode(id), local: id});
           path.replaceWithMultiple([
@@ -200,9 +204,13 @@ export default function ({types: t}) {
           path.node.specifiers.forEach(node => {
             const {exported, local} = node;
             const binding = path.scope.getBinding(local.name);
-            const isImmutable = !binding || ~['const', 'module'].indexOf(binding.kind);
-            if (isImmutable) {
-              // undefined, globals, const and imports
+            if (!binding) return;
+            if (opts.unsafeConst && binding.kind === 'const') {
+              // allow to rewire constants
+              binding.kind = 'let';
+              binding.path.parent.kind = 'let';
+            } else if (['const', 'module'].includes(binding.kind)) {
+              // const and imports
               const id = path.scope.generateUidIdentifier(local.name);
               exports.push({exported, local: id});
               path.insertBefore(t.variableDeclaration('var', [t.variableDeclarator(id, local)]));
