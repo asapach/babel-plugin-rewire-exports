@@ -198,13 +198,21 @@ require("@babel/core").transform("code", {
 });
 ```
 
+## Limitations
+Named constant exports cannot be rewired, because the plugin relies on variables being assign-able in order to work.
+E.g. rewiring the following export throws an exception:
+
+```js
+export const foo = 'bar';
+```
+
+See [unsafeConst](https://github.com/asapach/babel-plugin-rewire-exports#unsafeconst) option to enable *potentially unsafe* rewiring constant exports.
+
 ## Options
 
 ### `unsafeConst`
 `boolean`, defaults to `false`.
-
-Constants cannot be rewired, because the plugin relies on variables being assign-able in order to work.
-However setting `unsafeConst: true` will convert `export const foo = 'bar'` to `export let foo = 'bar'`.
+Setting `unsafeConst: true` will convert `export const foo = 'bar'` to `export let foo = 'bar'`.
 This will allow to treat named constant exports as a regular variables.
 This is *potentially unsafe* if your code relies on constants being read-only.
 

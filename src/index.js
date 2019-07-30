@@ -13,6 +13,12 @@ export default function ({types: t}) {
     }
   `, {sourceType: 'module'});
 
+  const buildFakeStub = template(`
+    export function REWIRE() {
+      throw new Error('Named constant exports cannot be rewired, see https://github.com/asapach/babel-plugin-rewire-exports#limitations');
+    }
+  `, {sourceType: 'module'});
+
   const buildRestore = template(`
     export function RESTORE() {
       BODY
@@ -43,6 +49,9 @@ export default function ({types: t}) {
           if (hoisted.length) {
             path.unshiftContainer('body', [t.variableDeclaration('var', hoisted)]);
           }
+          // there're exports that can be rewired, and exports that cannot be rewired
+          const immutableExports = exports.filter(({kind}) => kind === 'const');
+          exports = exports.filter(e => !immutableExports.includes(e));
 
           // generate temp variables to capture original values
           const tempVars = [];
@@ -72,12 +81,19 @@ export default function ({types: t}) {
             );
           });
 
+          // generate fake stub functions for immutable exports
+          const fakeStubs = immutableExports.map(({exported}) => {
+            const rewire = t.identifier(`rewire$${exported.name}`);
+            return markVisited(buildFakeStub({REWIRE: rewire}));
+          });
+
           // generate restore function
           const restore = path.scope.hasOwnBinding('restore') ? t.identifier('restore$rewire') : restoreIdentifier;
           const assignments = rewired.map(({local, original}) => t.expressionStatement(t.assignmentExpression('=', local, original)));
 
           const body = [
             ...stubs,
+            ...fakeStubs,
             markVisited(buildRestore({RESTORE: restore, BODY: assignments}))
           ];
 
@@ -145,25 +161,24 @@ export default function ({types: t}) {
           if (declaration.kind === 'const') {
             if (opts.unsafeConst) {
               declaration.kind = 'let'; // convert const to let
-            } else {
-              return; // ignore constants
             }
           }
           declaration.declarations.forEach(({id}) => {
+            const kind = declaration.kind;
             if (t.isIdentifier(id)) {
               // export var foo
-              exports.push({exported: t.cloneNode(id), local: id});
+              exports.push({exported: t.cloneNode(id), local: id, kind});
             } else if (t.isArrayPattern(id)) {
               // export var [foo, bar, ...baz] = qux;
               id.elements.forEach(e => {
                 if (t.isIdentifier(e)) {
-                  exports.push({exported: t.cloneNode(e), local: e});
+                  exports.push({exported: t.cloneNode(e), local: e, kind});
                 } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
                   const id = e.argument;
-                  exports.push({exported: t.cloneNode(id), local: id});
+                  exports.push({exported: t.cloneNode(id), local: id, kind});
                 } else if (t.isAssignmentPattern(e) && t.isIdentifier(e.left)) {
                   const id = e.left;
-                  exports.push({exported: t.cloneNode(id), local: id});
+                  exports.push({exported: t.cloneNode(id), local: id, kind});
                 }
               });
             } else if (t.isObjectPattern(id)) {
@@ -171,10 +186,10 @@ export default function ({types: t}) {
               id.properties.forEach(e => {
                 if (t.isObjectProperty(e)) {
                   const id = e.key;
-                  exports.push({exported: t.cloneNode(id), local: id});
+                  exports.push({exported: t.cloneNode(id), local: id, kind});
                 } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
                   const id = e.argument;
-                  exports.push({exported: t.cloneNode(id), local: id});
+                  exports.push({exported: t.cloneNode(id), local: id, kind});
                 }
               });
             }
