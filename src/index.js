@@ -30,6 +30,41 @@ export default function ({types: t}) {
     return node;
   }
 
+  function captureVariableDeclarations(declaration) {
+    const variables = [];
+    declaration.declarations.forEach(({id}) => {
+      if (t.isIdentifier(id)) {
+        // export var foo
+        variables.push({exported: t.cloneNode(id), local: id});
+      } else if (t.isArrayPattern(id)) {
+        // export var [foo, bar, ...baz] = qux;
+        id.elements.forEach(e => {
+          if (t.isIdentifier(e)) {
+            variables.push({exported: t.cloneNode(e), local: e});
+          } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
+            const id = e.argument;
+            variables.push({exported: t.cloneNode(id), local: id});
+          } else if (t.isAssignmentPattern(e) && t.isIdentifier(e.left)) {
+            const id = e.left;
+            variables.push({exported: t.cloneNode(id), local: id});
+          }
+        });
+      } else if (t.isObjectPattern(id)) {
+        // export var {foo, bar, ...baz} = qux;
+        id.properties.forEach(e => {
+          if (t.isObjectProperty(e)) {
+            const id = e.key;
+            variables.push({exported: t.cloneNode(id), local: id});
+          } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
+            const id = e.argument;
+            variables.push({exported: t.cloneNode(id), local: id});
+          }
+        });
+      }
+    });
+    return variables;
+  }
+
   return {
     visitor: {
       Program: {
@@ -146,39 +181,19 @@ export default function ({types: t}) {
             if (opts.unsafeConst) {
               declaration.kind = 'let'; // convert const to let
             } else {
-              return; // ignore constants
+              // convert export variable declaration to export specifier
+              // export const foo = 'bar'; → const foo = 'bar'; export { foo };
+              const identifiers = captureVariableDeclarations(declaration);
+              path.replaceWithMultiple([
+                declaration,
+                t.exportNamedDeclaration(null, identifiers.map(({exported, local}) =>
+                  t.exportSpecifier(t.identifier(local.name), t.identifier(exported.name))
+                ))
+              ]);
+              return; // visitor will handle the added export specifier later
             }
           }
-          declaration.declarations.forEach(({id}) => {
-            if (t.isIdentifier(id)) {
-              // export var foo
-              exports.push({exported: t.cloneNode(id), local: id});
-            } else if (t.isArrayPattern(id)) {
-              // export var [foo, bar, ...baz] = qux;
-              id.elements.forEach(e => {
-                if (t.isIdentifier(e)) {
-                  exports.push({exported: t.cloneNode(e), local: e});
-                } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
-                  const id = e.argument;
-                  exports.push({exported: t.cloneNode(id), local: id});
-                } else if (t.isAssignmentPattern(e) && t.isIdentifier(e.left)) {
-                  const id = e.left;
-                  exports.push({exported: t.cloneNode(id), local: id});
-                }
-              });
-            } else if (t.isObjectPattern(id)) {
-              // export var {foo, bar, ...baz} = qux;
-              id.properties.forEach(e => {
-                if (t.isObjectProperty(e)) {
-                  const id = e.key;
-                  exports.push({exported: t.cloneNode(id), local: id});
-                } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
-                  const id = e.argument;
-                  exports.push({exported: t.cloneNode(id), local: id});
-                }
-              });
-            }
-          });
+          exports.push(...captureVariableDeclarations(declaration));
         } else if (t.isFunctionDeclaration(declaration)) {
           // export function foo() {}
           const id = declaration.id;

@@ -1,4 +1,4 @@
-export const foo = 'bar';
+export const foo = 'bar', baz = 'qux';
 
-const baz = false;
-export { baz };
+const whatsit = false;
+export { whatsit };

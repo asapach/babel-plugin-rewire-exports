@@ -1,22 +1,32 @@
 export var {
   foo,
-  bar = false,
-  baz
+  bar = false
 } = qux;
 export var [ham = 1, ...eggs] = bacon;
+const {
+  quux,
+  quuz = false
+} = fred;
+var _quux = quux;
+var _quuz = quuz;
+export { _quux as quux, _quuz as quuz };
+const [corge = 1, ...grault] = garply;
+var _corge = corge;
+var _grault = grault;
+export { _corge as corge, _grault as grault };
 var _foo = foo,
     _bar = bar,
-    _baz = baz,
     _ham = ham,
-    _eggs = eggs;
+    _eggs = eggs,
+    _quux2 = _quux,
+    _quuz2 = _quuz,
+    _corge2 = _corge,
+    _grault2 = _grault;
 export function rewire$foo($stub) {
   foo = $stub;
 }
 export function rewire$bar($stub) {
   bar = $stub;
-}
-export function rewire$baz($stub) {
-  baz = $stub;
 }
 export function rewire$ham($stub) {
   ham = $stub;
@@ -24,10 +34,25 @@ export function rewire$ham($stub) {
 export function rewire$eggs($stub) {
   eggs = $stub;
 }
+export function rewire$quux($stub) {
+  _quux = $stub;
+}
+export function rewire$quuz($stub) {
+  _quuz = $stub;
+}
+export function rewire$corge($stub) {
+  _corge = $stub;
+}
+export function rewire$grault($stub) {
+  _grault = $stub;
+}
 export function restore() {
   foo = _foo;
   bar = _bar;
-  baz = _baz;
   ham = _ham;
   eggs = _eggs;
+  _quux = _quux2;
+  _quuz = _quuz2;
+  _corge = _corge2;
+  _grault = _grault2;
 }
