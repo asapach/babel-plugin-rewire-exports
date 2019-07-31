@@ -13,3 +13,5 @@ export { bar as qux, baz };
 export class whatsit extends foo {
 
 }
+
+export const whatnot = false, whatever = true;

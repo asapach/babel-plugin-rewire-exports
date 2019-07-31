@@ -1,11 +1,11 @@
 export var {
-  foo,
-  bar = false
+  foo = false,
+  ...bar
 } = qux;
 export var [ham = 1, ...eggs] = bacon;
 const {
-  quux,
-  quuz = false
+  quux = false,
+  ...quuz
 } = fred;
 var _quux = quux;
 var _quuz = quuz;
