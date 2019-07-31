@@ -13,8 +13,8 @@ describe('unsafeConst option', () => {
   };
 
   it('should allow to rewire constants', () => {
-    const actual = transformFileSync('./test/unsafe-const/actual.js', options).code;
-    const expected = fs.readFileSync('./test/unsafe-const/expected.js').toString();
+    const actual = transformFileSync('./test/unsafe-const/input.js', options).code;
+    const expected = fs.readFileSync('./test/unsafe-const/output.js').toString();
 
     assert.equal(trim(actual), trim(expected));
   });

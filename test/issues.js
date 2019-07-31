@@ -12,15 +12,15 @@ describe('issues', () => {
   };
 
   it('#1 undefined wire', () => {
-    const actual = transformFileSync('./test/issues/1/actual.js', options).code;
-    const expected = fs.readFileSync('./test/issues/1/expected.js').toString();
+    const actual = transformFileSync('./test/issues/1/input.js', options).code;
+    const expected = fs.readFileSync('./test/issues/1/output.js').toString();
 
     assert.equal(trim(actual), trim(expected));
   });
 
   it('#5 Explicit re-export is not working', () => {
-    const actual = transformFileSync('./test/issues/5/actual.js', options).code;
-    const expected = fs.readFileSync('./test/issues/5/expected.js').toString();
+    const actual = transformFileSync('./test/issues/5/input.js', options).code;
+    const expected = fs.readFileSync('./test/issues/5/output.js').toString();
 
     assert.equal(trim(actual), trim(expected));
   });
@@ -32,8 +32,8 @@ describe('issues', () => {
         unsafeConst: true
       }]]
     };
-    const actual = transformFileSync('./test/issues/6/actual.js', options).code;
-    const expected = fs.readFileSync('./test/issues/6/expected.js').toString();
+    const actual = transformFileSync('./test/issues/6/input.js', options).code;
+    const expected = fs.readFileSync('./test/issues/6/output.js').toString();
 
     assert.equal(trim(actual), trim(expected));
   });
@@ -47,8 +47,8 @@ describe('issues', () => {
       ]],
       plugins: [plugin]
     };
-    const actual = transformFileSync('./test/issues/13/actual.js', options).code;
-    const expected = fs.readFileSync('./test/issues/13/expected.js').toString();
+    const actual = transformFileSync('./test/issues/13/input.js', options).code;
+    const expected = fs.readFileSync('./test/issues/13/output.js').toString();
 
     assert.equal(trim(actual), trim(expected));
   });
@@ -60,8 +60,8 @@ describe('issues', () => {
         unsafeConst: true
       }]]
     };
-    const actual = transformFileSync('./test/issues/15/actual.js', options).code;
-    const expected = fs.readFileSync('./test/issues/15/expected.js').toString();
+    const actual = transformFileSync('./test/issues/15/input.js', options).code;
+    const expected = fs.readFileSync('./test/issues/15/output.js').toString();
 
     assert.equal(trim(actual), trim(expected));
   });

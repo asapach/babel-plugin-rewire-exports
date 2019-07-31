@@ -11,8 +11,8 @@ describe('cjs modules should work', () => {
       plugins: [plugin, '@babel/plugin-transform-modules-commonjs']
     };
 
-    const actual = transformFileSync('./test/cjs/actual.js', options).code;
-    const expected = fs.readFileSync('./test/cjs/expected.js').toString();
+    const actual = transformFileSync('./test/cjs/input.js', options).code;
+    const expected = fs.readFileSync('./test/cjs/output.js').toString();
 
     assert.equal(trim(actual), trim(expected));
   });
@@ -22,8 +22,8 @@ describe('cjs modules should work', () => {
       plugins: [plugin]
     };
 
-    const actual = transformFileSync('./test/cjs/actual.js', options).code;
-    const expected = fs.readFileSync('./test/cjs/expected.js').toString();
+    const actual = transformFileSync('./test/cjs/input.js', options).code;
+    const expected = fs.readFileSync('./test/cjs/output.js').toString();
 
     assert.equal(trim(actual), trim(expected));
   });

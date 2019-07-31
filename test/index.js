@@ -10,15 +10,15 @@ describe('Plugin', () => {
   fs.readdirSync(fixturesDir).map((caseName) => {
     it(`should ${caseName.split('-').join(' ')}`, () => {
       const fixtureDir = path.join(fixturesDir, caseName);
-      const actualPath = path.join(fixtureDir, 'actual.js');
+      const inputPath = path.join(fixtureDir, 'input.js');
       const options = {
         babelrc: false,
         plugins: [plugin]
       };
 
-      const actual = transformFileSync(actualPath, options).code;
+      const actual = transformFileSync(inputPath, options).code;
       const expected = fs.readFileSync(
-        path.join(fixtureDir, 'expected.js')
+        path.join(fixtureDir, 'output.js')
       ).toString();
 
       assert.equal(trim(actual), trim(expected));
