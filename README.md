@@ -6,8 +6,8 @@
 
 Babel plugin for stubbing (ES6, ES2015) module exports.
 It allows to rewire the exported values in all the importing modules.
-Unlike [babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire) it doesn't modify the module
-internals (e.g. imports and top-level variables and functions).
+Unlike [babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire) it doesn't modify the module internals
+(e.g. imports and top-level variables and functions).
 See [How it works](#how-it-works) section for implementation details.
 
 > The `master` branch targets Babel v7.
@@ -141,20 +141,30 @@ and imports will be automatically updated via their bindings.
 Here's how various kinds of export declarations are transformed:
 * Literals (`export default 'foo'`) - the original value is copied to a variable to be stubbed and restored later:
   `export {_default as default}`
+
 * Variables:
   - named exports (`export var foo`, `export let bar` or `export {baz}`) are left intact,
     but their initial values are similarly copied to temp variables.
   - default export (`export default foo`) is converted to a named export to enable live binding:
     `export {foo as default}`
-* Constants (`export const foo = 'bar'`) are ignored by default,
-  but you can use `unsafeConst` [option](#options) to convert `const` to `let` in order to enable the transformation.
+
+* Constants (`export const foo = 'bar'` or `export default foo`) are treated similar to variables,
+  but their values are **not modified** _within_ the module (since they are read-only) - only exported values are rewired:
+  - named exports: `export { _foo as foo }`
+  - default export: `export { _default as default }`
+
+  You can use `unsafeConst` [option](#options) to convert `const` to `let` in order to enable live binding.
+
 * Functions (`export default function () {…}` or `export function foo() {…}`)
   are split into a function declaration and exported variable by the same name.
   The variable is hoisted to the very top of the module to preserve existing behavior.
+
 * Classes (`export default class {…}` or `export class foo {…}`) are handled similarly to functions
   except the variables are not hoisted (again to preserve the existing behavior).
+
 * Re-exports (`export * from './foo.js'` or `export {bar} from 'baz'`) are ignored.
-* Immutable values such as `undefined`, *globals*, *constants* and *imports* are copied similar to literals. 
+
+* Immutable values such as `undefined`, *globals* and *imports* are copied similar to literals. 
 
 ## Installation
 
@@ -205,7 +215,7 @@ require("@babel/core").transform("code", {
 
 Constants cannot be rewired, because the plugin relies on variables being assign-able in order to work.
 However setting `unsafeConst: true` will convert `export const foo = 'bar'` to `export let foo = 'bar'`.
-This will allow to treat named constant exports as a regular variables.
+This will allow to treat constant exports as regular variables.
 This is *potentially unsafe* if your code relies on constants being read-only.
 
 [npm-image]: https://img.shields.io/npm/v/babel-plugin-rewire-exports.svg?style=flat
