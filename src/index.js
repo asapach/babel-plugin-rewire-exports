@@ -79,11 +79,16 @@ export default function ({types: t}) {
             path.unshiftContainer('body', [t.variableDeclaration('var', hoisted)]);
           }
 
-          // generate temp variables to capture original values
+          // generate temp variables if it's required to capture original values
           const tempVars = [];
           exports.filter(e => !e.original).forEach(e => {
-            const temp = e.original = path.scope.generateUidIdentifierBasedOnNode(e.exported);
-            tempVars.push(t.variableDeclarator(temp, e.local));
+            const {exported, local} = e;
+            if (path.scope.hasBinding(exported.name) && exported.name !== local.name) {
+              e.original = exported;
+            } else {
+              const temp = e.original = path.scope.generateUidIdentifierBasedOnNode(exported);
+              tempVars.push(t.variableDeclarator(temp, local));
+            }
           });
 
           // generate new IDs to keep sourcemaps clean

@@ -23,9 +23,7 @@ var _whatever = whatever;
 export { _whatnot as whatnot, _whatever as whatever };
 var _qux = bar,
     _baz = baz,
-    _whatsit = whatsit,
-    _whatnot2 = _whatnot,
-    _whatever2 = _whatever;
+    _whatsit = whatsit;
 export function rewire($stub) {
   foo = $stub;
 }
@@ -53,6 +51,6 @@ export function restore() {
   bar = _qux;
   baz = _baz;
   whatsit = _whatsit;
-  _whatnot = _whatnot2;
-  _whatever = _whatever2;
+  _whatnot = whatnot;
+  _whatever = whatever;
 }
