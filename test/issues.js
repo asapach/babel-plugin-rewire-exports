@@ -65,4 +65,19 @@ describe('issues', () => {
 
     assert.equal(trim(actual), trim(expected));
   });
+
+  it('#19 Duplicate exports in es5', () => {
+    const options = {
+      babelrc: false,
+      presets: [[
+        '@babel/preset-env',
+        { modules: false }
+      ]],
+      plugins: [plugin]
+    };
+    const actual = transformFileSync('./test/issues/19/input.js', options).code;
+    const expected = fs.readFileSync('./test/issues/19/output.js').toString();
+
+    assert.equal(trim(actual), trim(expected));
+  });
 });

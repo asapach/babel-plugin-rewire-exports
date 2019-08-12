@@ -79,6 +79,16 @@ export default function ({types: t}) {
             path.unshiftContainer('body', [t.variableDeclaration('var', hoisted)]);
           }
 
+          // de-duplicate the exports
+          const unique = exports.reduce((acc, e) => {
+            const key = e.exported.name;
+            if (!acc[key]) {
+              acc[key] = e;
+            }
+            return acc;
+          }, {});
+          exports = Object.keys(unique).map(k => unique[k]);
+
           // generate temp variables if it's required to capture original values
           const tempVars = [];
           exports.filter(e => !e.original).forEach(e => {
