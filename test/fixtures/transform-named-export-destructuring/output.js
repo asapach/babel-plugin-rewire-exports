@@ -17,11 +17,7 @@ export { _corge as corge, _grault as grault };
 var _foo = foo,
     _bar = bar,
     _ham = ham,
-    _eggs = eggs,
-    _quux2 = _quux,
-    _quuz2 = _quuz,
-    _corge2 = _corge,
-    _grault2 = _grault;
+    _eggs = eggs;
 export function rewire$foo($stub) {
   foo = $stub;
 }
@@ -51,8 +47,8 @@ export function restore() {
   bar = _bar;
   ham = _ham;
   eggs = _eggs;
-  _quux = _quux2;
-  _quuz = _quuz2;
-  _corge = _corge2;
-  _grault = _grault2;
+  _quux = quux;
+  _quuz = quuz;
+  _corge = corge;
+  _grault = grault;
 }
