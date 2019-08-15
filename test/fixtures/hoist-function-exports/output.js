@@ -1,18 +1,15 @@
-var foo = _foo,
-    baz = _baz;
-foo.bar = baz;
-
-function _foo() {
+var foo = function foo() {
   return null;
-}
-
-export { foo as default };
-
-function _baz() {
+},
+    baz = function baz() {
   return false;
-}
+};
 
+foo.bar = baz;
+export { foo as default };
 export { baz };
+var _default = foo,
+    _baz = baz;
 export function rewire($stub) {
   foo = $stub;
 }
@@ -20,6 +17,6 @@ export function rewire$baz($stub) {
   baz = $stub;
 }
 export function restore() {
-  foo = _foo;
+  foo = _default;
   baz = _baz;
 }

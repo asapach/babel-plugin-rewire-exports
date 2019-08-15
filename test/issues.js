@@ -11,18 +11,19 @@ describe('issues', () => {
     plugins: [plugin]
   };
 
-  it('#1 undefined wire', () => {
-    const actual = transformFileSync('./test/issues/1/input.js', options).code;
-    const expected = fs.readFileSync('./test/issues/1/output.js').toString();
+  const assertIssue = (id, options) => {
+    const actual = transformFileSync(`./test/issues/${id}/input.js`, options).code;
+    const expected = fs.readFileSync(`./test/issues/${id}/output.js`).toString();
 
     assert.equal(trim(actual), trim(expected));
+  };
+
+  it('#1 undefined wire', () => {
+    assertIssue(1, options);
   });
 
   it('#5 Explicit re-export is not working', () => {
-    const actual = transformFileSync('./test/issues/5/input.js', options).code;
-    const expected = fs.readFileSync('./test/issues/5/output.js').toString();
-
-    assert.equal(trim(actual), trim(expected));
+    assertIssue(5, options);
   });
 
   it('#6 Fail to rewire named exported constant functions', () => {
@@ -32,10 +33,7 @@ describe('issues', () => {
         unsafeConst: true
       }]]
     };
-    const actual = transformFileSync('./test/issues/6/input.js', options).code;
-    const expected = fs.readFileSync('./test/issues/6/output.js').toString();
-
-    assert.equal(trim(actual), trim(expected));
+    assertIssue(6, options);
   });
 
   it('#13 Wrong names are exported', () => {
@@ -47,10 +45,7 @@ describe('issues', () => {
       ]],
       plugins: [plugin]
     };
-    const actual = transformFileSync('./test/issues/13/input.js', options).code;
-    const expected = fs.readFileSync('./test/issues/13/output.js').toString();
-
-    assert.equal(trim(actual), trim(expected));
+    assertIssue(13, options);
   });
 
   it('#15 Problem trying to rewire function within same file', () => {
@@ -60,10 +55,7 @@ describe('issues', () => {
         unsafeConst: true
       }]]
     };
-    const actual = transformFileSync('./test/issues/15/input.js', options).code;
-    const expected = fs.readFileSync('./test/issues/15/output.js').toString();
-
-    assert.equal(trim(actual), trim(expected));
+    assertIssue(15, options);
   });
 
   it('#19 Duplicate exports in es5', () => {
@@ -75,9 +67,18 @@ describe('issues', () => {
       ]],
       plugins: [plugin]
     };
-    const actual = transformFileSync('./test/issues/19/input.js', options).code;
-    const expected = fs.readFileSync('./test/issues/19/output.js').toString();
+    assertIssue(19, options);
+  });
 
-    assert.equal(trim(actual), trim(expected));
+  it('#20 export functional components', () => {
+    const options = {
+      babelrc: false,
+      presets: [[
+        '@babel/preset-env',
+        { modules: false }
+      ]],
+      plugins: [plugin]
+    };
+    assertIssue(20, options);
   });
 });

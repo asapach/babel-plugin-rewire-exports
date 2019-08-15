@@ -1,19 +1,18 @@
-var spam = _spam;
-
-function _spam() {
+var spam = function spam() {
   return {
     eggs: function eggs() {
       _eggs();
     }
   };
-}
+};
 
 export { spam };
 
 var _eggs = function eggs() {};
 
 export { _eggs as eggs };
-var _eggs2 = _eggs;
+var _spam = spam,
+    _eggs2 = _eggs;
 export function rewire$spam($stub) {
   spam = $stub;
 }

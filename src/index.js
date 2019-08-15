@@ -66,18 +66,14 @@ export default function ({types: t}) {
   }
 
   return {
+    name: 'rewire-exports',
     visitor: {
       Program: {
         enter(path, state) {
           state.exports = [];
-          state.hoisted = [];
         },
-        exit(path, {exports, hoisted}) {
+        exit(path, {exports}) {
           if (!exports.length) return;
-          // add hoisted variables to the top
-          if (hoisted.length) {
-            path.unshiftContainer('body', [t.variableDeclaration('var', hoisted)]);
-          }
 
           // de-duplicate the exports
           const unique = exports.reduce((acc, e) => {
@@ -139,7 +135,7 @@ export default function ({types: t}) {
         }
       },
       // export default
-      ExportDefaultDeclaration(path, {exports, hoisted, opts}) {
+      ExportDefaultDeclaration(path, {exports, opts}) {
         const declaration = path.node.declaration;
         const isIdentifier = t.isIdentifier(declaration);
         const binding = isIdentifier && path.scope.getBinding(declaration.name);
@@ -156,13 +152,10 @@ export default function ({types: t}) {
         } else if (t.isFunctionDeclaration(declaration)) {
           //export default function () {}
           const id = declaration.id || path.scope.generateUidIdentifier('default');
-          declaration.id = path.scope.generateUidIdentifierBasedOnNode(declaration.id);
-          exports.push({exported: defaultIdentifier, local: id, original: declaration.id});
-          path.replaceWithMultiple([
-            declaration,
-            buildNamedExport(id, defaultIdentifier)
-          ]);
-          hoisted.push(t.variableDeclarator(id, declaration.id));
+          exports.push({exported: defaultIdentifier, local: id});
+          path.replaceWith(buildNamedExport(id, defaultIdentifier));
+          path.scope.removeBinding(id.name);
+          path.scope.push({id, init: t.functionExpression(declaration.id, declaration.params, declaration.body, declaration.generator, declaration.async)});
         } else if (t.isClassDeclaration(declaration)) {
           //export default class {}
           const id = declaration.id || path.scope.generateUidIdentifier('default');
@@ -184,7 +177,7 @@ export default function ({types: t}) {
         }
       },
       // export {}
-      ExportNamedDeclaration(path, {exports, hoisted, opts}) {
+      ExportNamedDeclaration(path, {exports, opts}) {
         if (path.node[VISITED]) return;
         // export { foo } from './bar.js'
         if (path.node.source) return;
@@ -212,13 +205,10 @@ export default function ({types: t}) {
         } else if (t.isFunctionDeclaration(declaration)) {
           // export function foo() {}
           const id = declaration.id;
-          declaration.id = path.scope.generateUidIdentifierBasedOnNode(id);
-          exports.push({exported: t.cloneNode(id), local: id, original: declaration.id});
-          path.replaceWithMultiple([
-            declaration,
-            buildNamedExport(id, id)
-          ]);
-          hoisted.push(t.variableDeclarator(id, declaration.id));
+          exports.push({exported: t.cloneNode(id), local: id});
+          path.replaceWith(buildNamedExport(id, id));
+          path.scope.removeBinding(id.name);
+          path.scope.push({id, init: t.functionExpression(declaration.id, declaration.params, declaration.body, declaration.generator, declaration.async)});
         } else if (t.isClassDeclaration(declaration)) {
           // export class Foo {}
           const id = declaration.id;

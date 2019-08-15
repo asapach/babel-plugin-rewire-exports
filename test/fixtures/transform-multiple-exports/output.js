@@ -1,16 +1,11 @@
-var foo = _foo,
-    bar = _bar;
-
-function _foo() {
+var foo = function foo() {
   return bar();
-}
+},
+    bar = function* bar() {
+  yield baz;
+};
 
 export { foo as default };
-
-function* _bar() {
-  yield baz;
-}
-
 export { bar };
 var baz = true;
 export { bar as qux, baz };
@@ -21,7 +16,9 @@ const whatnot = false,
 var _whatnot = whatnot;
 var _whatever = whatever;
 export { _whatnot as whatnot, _whatever as whatever };
-var _qux = bar,
+var _default = foo,
+    _bar = bar,
+    _qux = bar,
     _baz = baz,
     _whatsit = whatsit;
 export function rewire($stub) {
@@ -46,7 +43,7 @@ export function rewire$whatever($stub) {
   _whatever = $stub;
 }
 export function restore() {
-  foo = _foo;
+  foo = _default;
   bar = _bar;
   bar = _qux;
   baz = _baz;
