@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-rewire-exports",
-  "version": "2.0.0-alpha",
+  "version": "2.0.0",
   "description": "Babel plugin for stubbing (ES6, ES2015) module exports",
   "main": "lib/index.js",
   "scripts": {
