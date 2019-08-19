@@ -10,9 +10,6 @@ Unlike [babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire)
 (e.g. imports and top-level variables and functions).
 See [How it works](#how-it-works) section for implementation details.
 
-> The `master` branch targets Babel v7.
-[`0.x` branch](https://github.com/asapach/babel-plugin-rewire-exports/tree/0.x) supports Babel v6.
-
 ## Exports
 Plugin transforms module exports in such a way that they can be stubbed (or "rewired") via the following API:
 * default export - plugin exports additional `rewire(stub)` function that allows to replace the original
@@ -156,13 +153,14 @@ Here's how various kinds of export declarations are transformed:
   You can use `unsafeConst` [option](#options) to convert `const` to `let` in order to enable live binding.
 
 * Functions (`export default function () {…}` or `export function foo() {…}`)
-  are split into a function declaration and exported variable by the same name.
-  The variable is hoisted to the very top of the module to preserve existing behavior.
+  are converted into a function expression and exported variable by the same name.
+  The variable initialization is hoisted to the top of the scope to preserve existing behavior.
 
-* Classes (`export default class {…}` or `export class foo {…}`) are handled similarly to functions
+* Classes (`export default class foo {…}` or `export class foo {…}`) are handled similarly to functions
   except the variables are not hoisted (again to preserve the existing behavior).
 
 * Re-exports (`export * from './foo.js'` or `export {bar} from 'baz'`) are ignored.
+  They can be rewired in the original modules.
 
 * Immutable values such as `undefined`, *globals* and *imports* are copied similar to literals. 
 
@@ -213,7 +211,8 @@ require("@babel/core").transform("code", {
 ### `unsafeConst`
 `boolean`, defaults to `false`.
 
-Constants cannot be rewired, because the plugin relies on variables being assign-able in order to work.
+Constants cannot be rewired if you're targeting ES2015+,
+because the plugin relies on variables being assign-able in order to work.
 However setting `unsafeConst: true` will convert `export const foo = 'bar'` to `export let foo = 'bar'`.
 This will allow to treat constant exports as regular variables.
 This is *potentially unsafe* if your code relies on constants being read-only.
