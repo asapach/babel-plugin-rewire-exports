@@ -91,18 +91,18 @@ describe('adapter', function () {
 ```
 
 ## Compatibility
-* :heart: Works with modern browsers:
-  * :clock6: Safari 10.1+
-  * :watermelon: Chrome 61+
-  * :cat: Firefox 60+
-  * :gem: Edge 16+
-* :green_apple: Node:
+* ❤️ Works with modern browsers:
+  * 🕕 Safari 10.1+
+  * 🍉 Chrome 61+
+  * 🦊 Firefox 60+
+  * 💎 Edge 16+
+* 🍏 Node:
   * [`@std/esm`](https://github.com/standard-things/esm)
   * `8.5.0+` behind [`--experimental-modules` flag](https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V8.md#8.5.0)
-* :sparkles: SystemJS
-* :star2: Webpack 2+
-* :boom: Rollup
-* :package: Works with CommonJS, including running in Node and bundling with webpack/browserify:
+* ✨ SystemJS
+* 🌟 Webpack 2+
+* 💥 Rollup
+* 📦 Works with CommonJS, including running in Node and bundling with webpack/browserify:
   * Use [`env`](https://babeljs.io/docs/en/babel-preset-env/) preset
   * When specifying `plugins` directly make sure that `"rewire-exports"` goes
     before [`"@babel/plugin-transform-modules-commonjs"`](https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs)
