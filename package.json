@@ -47,6 +47,6 @@
     "@babel/register": "7",
     "eslint": "6",
     "mocha": "6",
-    "rimraf": "2"
+    "rimraf": "3"
   }
 }
