@@ -14,7 +14,7 @@ describe('cjs modules should work', () => {
     const actual = transformFileSync('./test/cjs/input.js', options).code;
     const expected = fs.readFileSync('./test/cjs/output.js').toString();
 
-    assert.equal(trim(actual), trim(expected));
+    assert.strictEqual(trim(actual), trim(expected));
   });
 
   it('when using env preset', () => {
@@ -25,6 +25,6 @@ describe('cjs modules should work', () => {
     const actual = transformFileSync('./test/cjs/input.js', options).code;
     const expected = fs.readFileSync('./test/cjs/output.js').toString();
 
-    assert.equal(trim(actual), trim(expected));
+    assert.strictEqual(trim(actual), trim(expected));
   });
 });

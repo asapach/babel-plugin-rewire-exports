@@ -15,7 +15,7 @@ describe('issues', () => {
     const actual = transformFileSync(`./test/issues/${id}/input.js`, options).code;
     const expected = fs.readFileSync(`./test/issues/${id}/output.js`).toString();
 
-    assert.equal(trim(actual), trim(expected));
+    assert.strictEqual(trim(actual), trim(expected));
   };
 
   it('#1 undefined wire', () => {

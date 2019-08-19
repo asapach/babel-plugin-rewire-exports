@@ -7,21 +7,50 @@ import plugin from '../src';
 
 describe('Plugin', () => {
   const fixturesDir = path.join(__dirname, 'fixtures');
+  const options = {
+    babelrc: false,
+    plugins: [plugin]
+  };
+
   fs.readdirSync(fixturesDir).map((caseName) => {
+    const fixtureDir = path.join(fixturesDir, caseName);
+    const inputPath = path.join(fixtureDir, 'input.js');
+
+    const assertFixture = (outputPath, options) => {
+      const actual = transformFileSync(inputPath, options).code;
+      if (fs.existsSync(outputPath)) {
+        const expected = fs.readFileSync(outputPath).toString();
+        assert.strictEqual(trim(actual), trim(expected));
+      } else {
+        fs.writeFileSync(outputPath, actual);
+      }
+    };
+
     it(`should ${caseName.split('-').join(' ')}`, () => {
-      const fixtureDir = path.join(fixturesDir, caseName);
-      const inputPath = path.join(fixtureDir, 'input.js');
+      assertFixture(path.join(fixtureDir, 'output.js'), options);
+    });
+
+    it(`should ${caseName.split('-').join(' ')} in ES5`, () => {
       const options = {
         babelrc: false,
+        presets: [[
+          '@babel/preset-env',
+          { modules: false }
+        ]],
         plugins: [plugin]
       };
 
-      const actual = transformFileSync(inputPath, options).code;
-      const expected = fs.readFileSync(
-        path.join(fixtureDir, 'output.js')
-      ).toString();
+      assertFixture(path.join(fixtureDir, 'es5.js'), options);
+    });
 
-      assert.equal(trim(actual), trim(expected));
+    it(`should ${caseName.split('-').join(' ')} in CJS`, () => {
+      const options = {
+        babelrc: false,
+        presets: ['@babel/preset-env'],
+        plugins: [plugin]
+      };
+
+      assertFixture(path.join(fixtureDir, 'cjs.js'), options);
     });
   });
 });
