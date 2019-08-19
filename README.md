@@ -106,7 +106,7 @@ describe('adapter', function () {
   * Use [`env`](https://babeljs.io/docs/en/babel-preset-env/) preset
   * When specifying `plugins` directly make sure that `"rewire-exports"` goes
     before [`"@babel/plugin-transform-modules-commonjs"`](https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs)
-  * Works with [:black_joker: Jest](https://jestjs.io/) using [babel-jest](https://github.com/facebook/jest/tree/master/packages/babel-jest)
+  * Works with [🃏 Jest](https://jestjs.io/) using [babel-jest](https://github.com/facebook/jest/tree/master/packages/babel-jest)
 
 ## How it works
 [In ES6, imports are live read-only views on exported values](
