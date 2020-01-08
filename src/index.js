@@ -160,20 +160,22 @@ export default function ({types: t}) {
           //export default class {}
           const id = declaration.id || path.scope.generateUidIdentifier('default');
           exports.push({exported: defaultIdentifier, local: id});
-          path.replaceWithMultiple([
+          const [varDeclaration] = path.replaceWithMultiple([
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.classExpression(declaration.id, declaration.superClass, declaration.body, declaration.decorators || []))
             ]),
             buildNamedExport(id, defaultIdentifier)
           ]);
+          path.scope.registerDeclaration(varDeclaration);
         } else {
           // export default ...
           const id = path.scope.generateUidIdentifier('default');
           exports.push({exported: defaultIdentifier, local: id});
-          path.replaceWithMultiple([
+          const [varDeclaration] = path.replaceWithMultiple([
             t.variableDeclaration('var', [t.variableDeclarator(id, declaration)]),
             buildNamedExport(id, defaultIdentifier)
           ]);
+          path.scope.registerDeclaration(varDeclaration);
         }
       },
       // export {}
@@ -192,12 +194,13 @@ export default function ({types: t}) {
               // convert export variable declaration to export specifier
               // export const foo = 'bar'; → const foo = 'bar'; export { foo };
               const identifiers = captureVariableDeclarations(declaration);
-              path.replaceWithMultiple([
+              const [varDeclaration] = path.replaceWithMultiple([
                 declaration,
                 t.exportNamedDeclaration(null, identifiers.map(({exported, local}) =>
                   t.exportSpecifier(t.identifier(local.name), t.identifier(exported.name))
                 ))
               ]);
+              path.scope.registerDeclaration(varDeclaration);
               return; // visitor will handle the added export specifier later
             }
           }
@@ -213,12 +216,13 @@ export default function ({types: t}) {
           // export class Foo {}
           const id = declaration.id;
           exports.push({exported: t.cloneNode(id), local: id});
-          path.replaceWithMultiple([
+          const [varDeclaration] = path.replaceWithMultiple([
             t.variableDeclaration('var', [
               t.variableDeclarator(id, t.classExpression(id, declaration.superClass, declaration.body, declaration.decorators || []))
             ]),
             buildNamedExport(id, id)
           ]);
+          path.scope.registerDeclaration(varDeclaration);
         } else {
           // export {foo}
           path.node.specifiers.forEach(node => {
@@ -233,7 +237,8 @@ export default function ({types: t}) {
               // const and imports
               const id = path.scope.generateUidIdentifier(local.name);
               exports.push({exported, local: id});
-              path.insertBefore(t.variableDeclaration('var', [t.variableDeclarator(id, local)]));
+              const [varDeclaration] = path.insertBefore(t.variableDeclaration('var', [t.variableDeclarator(id, local)]));
+              path.scope.registerDeclaration(varDeclaration);
               node.local = id;
               return;
             }

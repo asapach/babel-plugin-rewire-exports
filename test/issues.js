@@ -81,4 +81,13 @@ describe('issues', () => {
     };
     assertIssue(20, options);
   });
+
+  it('#23 warnings in combination with typescript', () => {
+    const options = {
+      babelrc: false,
+      plugins:
+        [plugin, '@babel/plugin-transform-typescript']
+    };
+    assertIssue(23, options);
+  });
 });

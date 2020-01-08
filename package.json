@@ -44,9 +44,10 @@
     "@babel/cli": "7",
     "@babel/core": "7",
     "@babel/preset-env": "7",
+    "@babel/preset-typescript": "7",
     "@babel/register": "7",
     "eslint": "6",
-    "mocha": "6",
+    "mocha": "7",
     "rimraf": "3"
   }
 }
