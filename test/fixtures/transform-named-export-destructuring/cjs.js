@@ -3,16 +3,20 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.rewire$baz = rewire$baz;
+exports.rewire$rest = rewire$rest;
 exports.rewire$foo = rewire$foo;
-exports.rewire$bar = rewire$bar;
 exports.rewire$ham = rewire$ham;
 exports.rewire$eggs = rewire$eggs;
-exports.rewire$quux = rewire$quux;
+exports.rewire$aa = rewire$aa;
+exports.rewire$bb = rewire$bb;
 exports.rewire$quuz = rewire$quuz;
+exports.rewire$other = rewire$other;
+exports.rewire$quux = rewire$quux;
 exports.rewire$corge = rewire$corge;
 exports.rewire$grault = rewire$grault;
 exports.restore = restore;
-exports.grault = exports.corge = exports.quuz = exports.quux = exports.eggs = exports.ham = exports.foo = exports.bar = void 0;
+exports.bb = exports.aa = exports.grault = exports.corge = exports.quux = exports.other = exports.quuz = exports.eggs = exports.ham = exports.foo = exports.rest = exports.baz = void 0;
 
 function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _nonIterableRest(); }
 
@@ -29,9 +33,11 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 var _qux = qux,
     _qux$foo = _qux.foo,
     foo = _qux$foo === void 0 ? false : _qux$foo,
-    bar = _objectWithoutProperties(_qux, ["foo"]);
+    baz = _qux.bar,
+    rest = _objectWithoutProperties(_qux, ["foo", "bar"]);
 
-exports.bar = bar;
+exports.rest = rest;
+exports.baz = baz;
 exports.foo = foo;
 
 var _bacon = bacon,
@@ -46,8 +52,10 @@ exports.ham = ham;
 var _fred = fred,
     _fred$quux = _fred.quux,
     quux = _fred$quux === void 0 ? false : _fred$quux,
-    quuz = _objectWithoutProperties(_fred, ["quux"]);
+    quuz = _fred.quuy,
+    other = _objectWithoutProperties(_fred, ["quux", "quuy"]);
 
+exports.other = other;
 exports.quuz = quuz;
 exports.quux = quux;
 
@@ -59,21 +67,38 @@ var _garply = garply,
 
 exports.grault = grault;
 exports.corge = corge;
-var _foo = foo,
-    _bar = bar,
+var _a = {
+  a: 3
+},
+    _a$a = _a.a,
+    aa = _a$a === void 0 ? 10 : _a$a,
+    _a$b$bb = _a.b.bb,
+    bb = _a$b$bb === void 0 ? 5 : _a$b$bb;
+exports.bb = bb;
+exports.aa = aa;
+var _baz = baz,
+    _rest = rest,
+    _foo = foo,
     _ham = ham,
     _eggs = eggs,
-    _quux = quux,
+    _aa = aa,
+    _bb = bb,
     _quuz = quuz,
+    _other = other,
+    _quux = quux,
     _corge = corge,
     _grault = grault;
 
-function rewire$foo($stub) {
-  exports.foo = foo = $stub;
+function rewire$baz($stub) {
+  exports.baz = baz = $stub;
 }
 
-function rewire$bar($stub) {
-  exports.bar = bar = $stub;
+function rewire$rest($stub) {
+  exports.rest = rest = $stub;
+}
+
+function rewire$foo($stub) {
+  exports.foo = foo = $stub;
 }
 
 function rewire$ham($stub) {
@@ -84,12 +109,24 @@ function rewire$eggs($stub) {
   exports.eggs = eggs = $stub;
 }
 
-function rewire$quux($stub) {
-  exports.quux = quux = $stub;
+function rewire$aa($stub) {
+  exports.aa = aa = $stub;
+}
+
+function rewire$bb($stub) {
+  exports.bb = bb = $stub;
 }
 
 function rewire$quuz($stub) {
   exports.quuz = quuz = $stub;
+}
+
+function rewire$other($stub) {
+  exports.other = other = $stub;
+}
+
+function rewire$quux($stub) {
+  exports.quux = quux = $stub;
 }
 
 function rewire$corge($stub) {
@@ -101,12 +138,16 @@ function rewire$grault($stub) {
 }
 
 function restore() {
+  exports.baz = baz = _baz;
+  exports.rest = rest = _rest;
   exports.foo = foo = _foo;
-  exports.bar = bar = _bar;
   exports.ham = ham = _ham;
   exports.eggs = eggs = _eggs;
-  exports.quux = quux = _quux;
+  exports.aa = aa = _aa;
+  exports.bb = bb = _bb;
   exports.quuz = quuz = _quuz;
+  exports.other = other = _other;
+  exports.quux = quux = _quux;
   exports.corge = corge = _corge;
   exports.grault = grault = _grault;
 }

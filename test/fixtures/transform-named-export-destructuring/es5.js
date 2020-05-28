@@ -13,9 +13,10 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 var _qux = qux,
     _qux$foo = _qux.foo,
     foo = _qux$foo === void 0 ? false : _qux$foo,
-    bar = _objectWithoutProperties(_qux, ["foo"]);
+    baz = _qux.bar,
+    rest = _objectWithoutProperties(_qux, ["foo", "bar"]);
 
-export { bar, foo };
+export { baz, rest, foo };
 
 var _bacon = bacon,
     _bacon2 = _toArray(_bacon),
@@ -28,9 +29,10 @@ export { ham, eggs };
 var _fred = fred,
     _fred$quux = _fred.quux,
     quux = _fred$quux === void 0 ? false : _fred$quux,
-    quuz = _objectWithoutProperties(_fred, ["quux"]);
+    quuz = _fred.quuy,
+    other = _objectWithoutProperties(_fred, ["quux", "quuy"]);
 
-export { quux, quuz };
+export { quuz, other, quux };
 
 var _garply = garply,
     _garply2 = _toArray(_garply),
@@ -39,19 +41,34 @@ var _garply = garply,
     grault = _garply2.slice(1);
 
 export { corge, grault };
-var _foo = foo,
-    _bar = bar,
+var _a = {
+  a: 3
+},
+    _a$a = _a.a,
+    aa = _a$a === void 0 ? 10 : _a$a,
+    _a$b$bb = _a.b.bb,
+    bb = _a$b$bb === void 0 ? 5 : _a$b$bb;
+export { aa, bb };
+var _baz = baz,
+    _rest = rest,
+    _foo = foo,
     _ham = ham,
     _eggs = eggs,
-    _quux = quux,
+    _aa = aa,
+    _bb = bb,
     _quuz = quuz,
+    _other = other,
+    _quux = quux,
     _corge = corge,
     _grault = grault;
+export function rewire$baz($stub) {
+  baz = $stub;
+}
+export function rewire$rest($stub) {
+  rest = $stub;
+}
 export function rewire$foo($stub) {
   foo = $stub;
-}
-export function rewire$bar($stub) {
-  bar = $stub;
 }
 export function rewire$ham($stub) {
   ham = $stub;
@@ -59,11 +76,20 @@ export function rewire$ham($stub) {
 export function rewire$eggs($stub) {
   eggs = $stub;
 }
-export function rewire$quux($stub) {
-  quux = $stub;
+export function rewire$aa($stub) {
+  aa = $stub;
+}
+export function rewire$bb($stub) {
+  bb = $stub;
 }
 export function rewire$quuz($stub) {
   quuz = $stub;
+}
+export function rewire$other($stub) {
+  other = $stub;
+}
+export function rewire$quux($stub) {
+  quux = $stub;
 }
 export function rewire$corge($stub) {
   corge = $stub;
@@ -72,12 +98,16 @@ export function rewire$grault($stub) {
   grault = $stub;
 }
 export function restore() {
+  baz = _baz;
+  rest = _rest;
   foo = _foo;
-  bar = _bar;
   ham = _ham;
   eggs = _eggs;
-  quux = _quux;
+  aa = _aa;
+  bb = _bb;
   quuz = _quuz;
+  other = _other;
+  quux = _quux;
   corge = _corge;
   grault = _grault;
 }

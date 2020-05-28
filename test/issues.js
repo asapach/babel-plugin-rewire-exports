@@ -90,4 +90,12 @@ describe('issues', () => {
     };
     assertIssue(23, options);
   });
+
+  it('#25 Build fails when using export const', () => {
+    const options = {
+      babelrc: false,
+      plugins: [plugin]
+    };
+    assertIssue(25, options);
+  });
 });

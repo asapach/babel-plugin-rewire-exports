@@ -30,39 +30,10 @@ export default function ({types: t}) {
     return node;
   }
 
-  function captureVariableDeclarations(declaration) {
-    const variables = [];
-    declaration.declarations.forEach(({id}) => {
-      if (t.isIdentifier(id)) {
-        // export var foo
-        variables.push({exported: t.cloneNode(id), local: id});
-      } else if (t.isArrayPattern(id)) {
-        // export var [foo, bar, ...baz] = qux;
-        id.elements.forEach(e => {
-          if (t.isIdentifier(e)) {
-            variables.push({exported: t.cloneNode(e), local: e});
-          } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
-            const id = e.argument;
-            variables.push({exported: t.cloneNode(id), local: id});
-          } else if (t.isAssignmentPattern(e) && t.isIdentifier(e.left)) {
-            const id = e.left;
-            variables.push({exported: t.cloneNode(id), local: id});
-          }
-        });
-      } else if (t.isObjectPattern(id)) {
-        // export var {foo, bar, ...baz} = qux;
-        id.properties.forEach(e => {
-          if (t.isObjectProperty(e)) {
-            const id = e.key;
-            variables.push({exported: t.cloneNode(id), local: id});
-          } else if (t.isRestElement(e) && t.isIdentifier(e.argument)) {
-            const id = e.argument;
-            variables.push({exported: t.cloneNode(id), local: id});
-          }
-        });
-      }
+  function captureVariableDeclarations(path) {
+    return Object.values(path.getOuterBindingIdentifiers(path)).map(([id]) => {
+      return {exported: t.cloneNode(id), local: id};
     });
-    return variables;
   }
 
   return {
@@ -193,7 +164,7 @@ export default function ({types: t}) {
             } else {
               // convert export variable declaration to export specifier
               // export const foo = 'bar'; → const foo = 'bar'; export { foo };
-              const identifiers = captureVariableDeclarations(declaration);
+              const identifiers = captureVariableDeclarations(path);
               const [varDeclaration] = path.replaceWithMultiple([
                 declaration,
                 t.exportNamedDeclaration(null, identifiers.map(({exported, local}) =>
@@ -204,7 +175,7 @@ export default function ({types: t}) {
               return; // visitor will handle the added export specifier later
             }
           }
-          exports.push(...captureVariableDeclarations(declaration));
+          exports.push(...captureVariableDeclarations(path));
         } else if (t.isFunctionDeclaration(declaration)) {
           // export function foo() {}
           const id = declaration.id;
