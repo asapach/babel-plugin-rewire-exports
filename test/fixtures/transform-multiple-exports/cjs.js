@@ -14,11 +14,7 @@ exports.rewire$whatnot = rewire$whatnot;
 exports.rewire$whatever = rewire$whatever;
 exports.restore = restore;
 exports.whatever = exports.whatnot = exports.whatsit = exports.baz = exports.qux = exports.bar = exports["default"] = void 0;
-
-var foo = function foo() {
-  return bar();
-},
-    bar = /*#__PURE__*/regeneratorRuntime.mark(function bar() {
+var bar = /*#__PURE__*/regeneratorRuntime.mark(function bar() {
   return regeneratorRuntime.wrap(function bar$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -33,8 +29,12 @@ var foo = function foo() {
     }
   }, bar);
 });
-
 exports.qux = exports.bar = bar;
+
+var foo = function foo() {
+  return bar();
+};
+
 exports["default"] = foo;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }

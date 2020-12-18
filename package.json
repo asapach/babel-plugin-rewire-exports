@@ -44,6 +44,7 @@
     "@babel/cli": "7",
     "@babel/core": "7",
     "@babel/preset-env": "7",
+    "@babel/preset-react": "7",
     "@babel/preset-typescript": "7",
     "@babel/register": "7",
     "eslint": "7",

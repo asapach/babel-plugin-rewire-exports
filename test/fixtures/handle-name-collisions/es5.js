@@ -1,7 +1,8 @@
+var restore = function restore() {};
+
 var rewire = function rewire() {
   return restore();
-},
-    restore = function restore() {};
+};
 
 export { rewire as default };
 export { restore };

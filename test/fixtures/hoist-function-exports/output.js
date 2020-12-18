@@ -1,8 +1,9 @@
+var baz = function baz() {
+  return false;
+};
+
 var foo = function foo() {
   return null;
-},
-    baz = function baz() {
-  return false;
 };
 
 foo.bar = baz;

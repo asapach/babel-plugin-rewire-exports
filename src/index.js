@@ -126,7 +126,11 @@ export default function ({types: t}) {
           exports.push({exported: defaultIdentifier, local: id});
           path.replaceWith(buildNamedExport(id, defaultIdentifier));
           path.scope.removeBinding(id.name);
-          path.scope.push({id, init: t.functionExpression(declaration.id, declaration.params, declaration.body, declaration.generator, declaration.async)});
+          path.scope.push({
+            id,
+            init: t.functionExpression(declaration.id, declaration.params, declaration.body, declaration.generator, declaration.async),
+            unique: true
+          });
         } else if (t.isClassDeclaration(declaration)) {
           //export default class {}
           const id = declaration.id || path.scope.generateUidIdentifier('default');
@@ -182,7 +186,11 @@ export default function ({types: t}) {
           exports.push({exported: t.cloneNode(id), local: id});
           path.replaceWith(buildNamedExport(id, id));
           path.scope.removeBinding(id.name);
-          path.scope.push({id, init: t.functionExpression(declaration.id, declaration.params, declaration.body, declaration.generator, declaration.async)});
+          path.scope.push({
+            id,
+            init: t.functionExpression(declaration.id, declaration.params, declaration.body, declaration.generator, declaration.async),
+            unique: true
+          });
         } else if (t.isClassDeclaration(declaration)) {
           // export class Foo {}
           const id = declaration.id;

@@ -8,14 +8,16 @@ exports.rewire$baz = rewire$baz;
 exports.restore = restore;
 exports.baz = exports["default"] = void 0;
 
-var foo = function foo() {
-  return null;
-},
-    baz = function baz() {
+var baz = function baz() {
   return false;
 };
 
 exports.baz = baz;
+
+var foo = function foo() {
+  return null;
+};
+
 exports["default"] = foo;
 var _default = foo,
     _baz = baz;

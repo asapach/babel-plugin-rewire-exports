@@ -98,4 +98,22 @@ describe('issues', () => {
     };
     assertIssue(25, options);
   });
+
+  it('#28 JSX is not transformed properly in development mode', () => {
+    const options = {
+      babelrc: false,
+      presets: [[
+        '@babel/preset-react',
+        { development: true }
+      ]],
+      plugins: [plugin]
+    };
+
+    const path = './test/issues/28';
+    const actual = transformFileSync(`${path}/input.jsx`, options).code;
+    const expected = fs.readFileSync(`${path}/output.js`).toString();
+
+    const tweaked = actual.replace(/"[^"]+\binput\.jsx"/, '"input.jsx"');
+    assert.strictEqual(trim(tweaked), trim(expected));
+  });
 });

@@ -1,9 +1,10 @@
+var bar = function bar(baz) {
+  return baz;
+};
+
 var foo = function foo(_ref) {
   var text = _ref.text;
   return text;
-},
-    bar = function bar(baz) {
-  return baz;
 };
 
 export { foo as default };

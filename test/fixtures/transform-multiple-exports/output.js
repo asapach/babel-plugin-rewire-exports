@@ -1,8 +1,9 @@
+var bar = function* bar() {
+  yield baz;
+};
+
 var foo = function foo() {
   return bar();
-},
-    bar = function* bar() {
-  yield baz;
 };
 
 export { foo as default };

@@ -1,9 +1,6 @@
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var foo = function foo() {
-  return bar();
-},
-    bar = /*#__PURE__*/regeneratorRuntime.mark(function bar() {
+var bar = /*#__PURE__*/regeneratorRuntime.mark(function bar() {
   return regeneratorRuntime.wrap(function bar$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -18,6 +15,10 @@ var foo = function foo() {
     }
   }, bar);
 });
+
+var foo = function foo() {
+  return bar();
+};
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 

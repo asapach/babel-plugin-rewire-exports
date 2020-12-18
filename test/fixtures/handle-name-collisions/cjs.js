@@ -8,12 +8,14 @@ exports.rewire$restore = rewire$restore;
 exports.restore$rewire = restore$rewire;
 exports.restore = exports["default"] = void 0;
 
-var rewire = function rewire() {
-  return restore();
-},
-    restore = function restore() {};
+var restore = function restore() {};
 
 exports.restore = restore;
+
+var rewire = function rewire() {
+  return restore();
+};
+
 exports["default"] = rewire;
 var _default = rewire,
     _restore = restore;

@@ -1,3 +1,5 @@
+var _eggs = function _eggs() {};
+
 var spam = function spam() {
   return {
     eggs: function eggs() {
@@ -7,8 +9,7 @@ var spam = function spam() {
       console.log(_foo);
     }
   };
-},
-    _eggs = function _eggs() {};
+};
 
 export { spam };
 export { _eggs as eggs };
