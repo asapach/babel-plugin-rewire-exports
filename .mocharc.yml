@@ -1,0 +1,5 @@
+spec:
+  - test/index.js
+  - test/cjs.js
+  - test/issues.js
+  - test/unsafe-const.js

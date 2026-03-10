@@ -1,3 +1,3 @@
 export function trim(str) {
-  return str.replace(/^\s+|\s+$/, '');
+  return str.replace(/\r\n/g, '\n').replace(/^\s+|\s+$/, '');
 }

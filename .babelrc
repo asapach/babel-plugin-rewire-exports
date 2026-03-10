@@ -1,5 +1,14 @@
 {
-  "presets": [
-    ["@babel/preset-env", { "targets": { "node": "current" }}]
-  ]
+  "env": {
+    "esm": {
+      "presets": [
+        ["@babel/preset-env", { "targets": { "node": "20" }, "modules": false }]
+      ]
+    },
+    "cjs": {
+      "presets": [
+        ["@babel/preset-env", { "targets": { "node": "20" } }]
+      ]
+    }
+  }
 }

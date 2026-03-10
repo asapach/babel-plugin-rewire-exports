@@ -1,4 +1,5 @@
-import template from '@babel/template';
+import _templateModule from '@babel/template';
+const template = _templateModule.default;
 
 export default function ({types: t}) {
   const defaultIdentifier = t.identifier('default');

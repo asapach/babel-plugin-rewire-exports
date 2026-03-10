@@ -2,14 +2,23 @@
   "name": "babel-plugin-rewire-exports",
   "version": "2.3.0",
   "description": "Babel plugin for stubbing (ES6, ES2015) module exports",
-  "main": "lib/index.js",
+  "type": "module",
+  "main": "lib/index.cjs",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    }
+  },
   "scripts": {
     "clean": "rimraf lib",
-    "build": "babel src -d lib",
+    "build:esm": "babel src -d lib --env-name esm",
+    "build:cjs": "babel src -d lib --out-file-extension .cjs --env-name cjs",
+    "build": "yarn build:esm && yarn build:cjs",
     "lint": "eslint src",
-    "test": "npm run lint && mocha --require test/babel-polyfill",
-    "test:watch": "npm run test -- --watch",
-    "prepack": "npm run clean && npm run build"
+    "test": "yarn lint && mocha",
+    "test:watch": "mocha --watch",
+    "prepack": "yarn clean && yarn build"
   },
   "repository": {
     "type": "git",
@@ -46,11 +55,10 @@
     "@babel/preset-env": "7",
     "@babel/preset-react": "7",
     "@babel/preset-typescript": "7",
-    "@babel/register": "7",
     "@eslint/js": "9",
     "eslint": "9",
     "globals": "15",
-    "mocha": "10",
+    "mocha": "11",
     "rimraf": "6"
   }
 }

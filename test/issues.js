@@ -1,8 +1,8 @@
 import fs from 'fs';
 import assert from 'assert';
 import { transformFileSync } from '@babel/core';
-import { trim } from './util';
-import plugin from '../src';
+import { trim } from './util.js';
+import plugin from '../src/index.js';
 
 describe('issues', () => {
   const options = {
