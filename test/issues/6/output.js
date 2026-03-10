@@ -3,8 +3,8 @@ export { foo };
 export { foo as default };
 export let bar = 'baz';
 var _foo = foo,
-    _default = foo,
-    _bar = bar;
+  _default = foo,
+  _bar = bar;
 export function rewire$foo($stub) {
   foo = $stub;
 }

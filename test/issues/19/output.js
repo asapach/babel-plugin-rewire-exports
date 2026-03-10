@@ -5,14 +5,11 @@ var spam = function spam() {
     }
   };
 };
-
 export { spam };
-
 var _eggs = function eggs() {};
-
 export { _eggs as eggs };
 var _spam = spam,
-    _eggs2 = _eggs;
+  _eggs2 = _eggs;
 export function rewire$spam($stub) {
   spam = $stub;
 }

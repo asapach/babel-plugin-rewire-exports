@@ -12,11 +12,8 @@ Object.defineProperty(exports, "foo", {
     return _bar.foo;
   }
 });
-
 var _bar = require("./bar.js");
-
 var _baz = require("./baz.js");
-
 Object.keys(_baz).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;

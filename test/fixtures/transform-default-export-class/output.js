@@ -2,9 +2,7 @@ var _default = class {
   constructor() {
     this.foo = 'bar';
   }
-
 };
-
 export { _default as default };
 var _default2 = _default;
 export function rewire($stub) {

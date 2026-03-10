@@ -2,14 +2,12 @@ let functionA = function () {
   const b = functionB('Test');
   return 'This is a ' + b;
 };
-
 let functionB = function (text) {
   return text.toUpperCase();
 };
-
 export { functionA, functionB };
 var _functionA = functionA,
-    _functionB = functionB;
+  _functionB = functionB;
 export function rewire$functionA($stub) {
   functionA = $stub;
 }

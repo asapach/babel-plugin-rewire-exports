@@ -1,5 +1,5 @@
 const foo = 'bar',
-      baz = 'qux';
+  baz = 'qux';
 var _foo = foo;
 var _baz = baz;
 export { _foo as foo, _baz as baz };

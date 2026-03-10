@@ -1,13 +1,11 @@
 var restore = function restore() {};
-
 var rewire = function rewire() {
   return restore();
 };
-
 export { rewire as default };
 export { restore };
 var _default = rewire,
-    _restore = restore;
+  _restore = restore;
 export function rewire$default($stub) {
   rewire = $stub;
 }

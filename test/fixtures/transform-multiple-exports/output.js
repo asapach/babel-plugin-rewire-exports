@@ -1,11 +1,9 @@
 var bar = function* bar() {
   yield baz;
 };
-
 var foo = function foo() {
   return bar();
 };
-
 export { foo as default };
 export { bar };
 var baz = true;
@@ -13,15 +11,15 @@ export { bar as qux, baz };
 var whatsit = class whatsit extends foo {};
 export { whatsit };
 const whatnot = false,
-      whatever = true;
+  whatever = true;
 var _whatnot = whatnot;
 var _whatever = whatever;
 export { _whatnot as whatnot, _whatever as whatever };
 var _default = foo,
-    _bar = bar,
-    _qux = bar,
-    _baz = baz,
-    _whatsit = whatsit;
+  _bar = bar,
+  _qux = bar,
+  _baz = baz,
+  _whatsit = whatsit;
 export function rewire($stub) {
   foo = $stub;
 }

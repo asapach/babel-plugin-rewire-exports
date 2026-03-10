@@ -47,8 +47,10 @@
     "@babel/preset-react": "7",
     "@babel/preset-typescript": "7",
     "@babel/register": "7",
-    "eslint": "7",
-    "mocha": "8",
-    "rimraf": "3"
+    "@eslint/js": "9",
+    "eslint": "9",
+    "globals": "15",
+    "mocha": "10",
+    "rimraf": "6"
   }
 }

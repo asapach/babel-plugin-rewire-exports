@@ -1,5 +1,4 @@
 var _eggs = function _eggs() {};
-
 var spam = function spam() {
   return {
     eggs: function eggs() {
@@ -10,14 +9,13 @@ var spam = function spam() {
     }
   };
 };
-
 export { spam };
 export { _eggs as eggs };
 var _foo = 1;
 export { _foo as foo };
 var _spam = spam,
-    _eggs2 = _eggs,
-    _foo2 = _foo;
+  _eggs2 = _eggs,
+  _foo2 = _foo;
 export function rewire$spam($stub) {
   spam = $stub;
 }

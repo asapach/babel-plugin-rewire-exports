@@ -3,144 +3,103 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.rewire$baz = rewire$baz;
-exports.rewire$rest = rewire$rest;
-exports.rewire$foo = rewire$foo;
-exports.rewire$ham = rewire$ham;
-exports.rewire$eggs = rewire$eggs;
+exports.rest = exports.quuz = exports.quux = exports.other = exports.ham = exports.grault = exports.foo = exports.eggs = exports.corge = exports.bb = exports.baz = exports.aa = void 0;
+exports.restore = restore;
 exports.rewire$aa = rewire$aa;
+exports.rewire$baz = rewire$baz;
 exports.rewire$bb = rewire$bb;
-exports.rewire$quuz = rewire$quuz;
+exports.rewire$corge = rewire$corge;
+exports.rewire$eggs = rewire$eggs;
+exports.rewire$foo = rewire$foo;
+exports.rewire$grault = rewire$grault;
+exports.rewire$ham = rewire$ham;
 exports.rewire$other = rewire$other;
 exports.rewire$quux = rewire$quux;
-exports.rewire$corge = rewire$corge;
-exports.rewire$grault = rewire$grault;
-exports.restore = restore;
-exports.bb = exports.aa = exports.grault = exports.corge = exports.quux = exports.other = exports.quuz = exports.eggs = exports.ham = exports.foo = exports.rest = exports.baz = void 0;
-
-function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest(); }
-
+exports.rewire$quuz = rewire$quuz;
+exports.rewire$rest = rewire$rest;
+function _toArray(r) { return _arrayWithHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+function _objectWithoutProperties(e, t) { if (null == e) return {}; var o, r, i = _objectWithoutPropertiesLoose(e, t); if (Object.getOwnPropertySymbols) { var n = Object.getOwnPropertySymbols(e); for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]); } return i; }
+function _objectWithoutPropertiesLoose(r, e) { if (null == r) return {}; var t = {}; for (var n in r) if ({}.hasOwnProperty.call(r, n)) { if (-1 !== e.indexOf(n)) continue; t[n] = r[n]; } return t; }
 var _qux = qux,
-    _qux$foo = _qux.foo,
-    foo = _qux$foo === void 0 ? false : _qux$foo,
-    baz = _qux.bar,
-    rest = _objectWithoutProperties(_qux, ["foo", "bar"]);
-
-exports.rest = rest;
-exports.baz = baz;
-exports.foo = foo;
-
+  _qux$foo = _qux.foo,
+  foo = exports.foo = _qux$foo === void 0 ? false : _qux$foo,
+  baz = exports.baz = _qux.bar,
+  rest = exports.rest = _objectWithoutProperties(_qux, ["foo", "bar"]);
 var _bacon = bacon,
-    _bacon2 = _toArray(_bacon),
-    _bacon2$ = _bacon2[0],
-    ham = _bacon2$ === void 0 ? 1 : _bacon2$,
-    eggs = _bacon2.slice(1);
-
-exports.eggs = eggs;
-exports.ham = ham;
-
+  _bacon2 = _toArray(_bacon),
+  _bacon2$ = _bacon2[0],
+  ham = exports.ham = _bacon2$ === void 0 ? 1 : _bacon2$,
+  eggs = exports.eggs = _arrayLikeToArray(_bacon2).slice(1);
 var _fred = fred,
-    _fred$quux = _fred.quux,
-    quux = _fred$quux === void 0 ? false : _fred$quux,
-    quuz = _fred.quuy,
-    other = _objectWithoutProperties(_fred, ["quux", "quuy"]);
-
-exports.other = other;
-exports.quuz = quuz;
-exports.quux = quux;
-
+  _fred$quux = _fred.quux,
+  quux = exports.quux = _fred$quux === void 0 ? false : _fred$quux,
+  quuz = exports.quuz = _fred.quuy,
+  other = exports.other = _objectWithoutProperties(_fred, ["quux", "quuy"]);
 var _garply = garply,
-    _garply2 = _toArray(_garply),
-    _garply2$ = _garply2[0],
-    corge = _garply2$ === void 0 ? 1 : _garply2$,
-    grault = _garply2.slice(1);
-
-exports.grault = grault;
-exports.corge = corge;
+  _garply2 = _toArray(_garply),
+  _garply2$ = _garply2[0],
+  corge = exports.corge = _garply2$ === void 0 ? 1 : _garply2$,
+  grault = exports.grault = _arrayLikeToArray(_garply2).slice(1);
 var _a = {
-  a: 3
-},
-    _a$a = _a.a,
-    aa = _a$a === void 0 ? 10 : _a$a,
-    _a$b$bb = _a.b.bb,
-    bb = _a$b$bb === void 0 ? 5 : _a$b$bb;
-exports.bb = bb;
-exports.aa = aa;
+    a: 3
+  },
+  _a$a = _a.a,
+  aa = exports.aa = _a$a === void 0 ? 10 : _a$a,
+  _a$b$bb = _a.b.bb,
+  bb = exports.bb = _a$b$bb === void 0 ? 5 : _a$b$bb;
 var _baz = baz,
-    _rest = rest,
-    _foo = foo,
-    _ham = ham,
-    _eggs = eggs,
-    _aa = aa,
-    _bb = bb,
-    _quuz = quuz,
-    _other = other,
-    _quux = quux,
-    _corge = corge,
-    _grault = grault;
-
+  _rest = rest,
+  _foo = foo,
+  _ham = ham,
+  _eggs = eggs,
+  _aa = aa,
+  _bb = bb,
+  _quuz = quuz,
+  _other = other,
+  _quux = quux,
+  _corge = corge,
+  _grault = grault;
 function rewire$baz($stub) {
   exports.baz = baz = $stub;
 }
-
 function rewire$rest($stub) {
   exports.rest = rest = $stub;
 }
-
 function rewire$foo($stub) {
   exports.foo = foo = $stub;
 }
-
 function rewire$ham($stub) {
   exports.ham = ham = $stub;
 }
-
 function rewire$eggs($stub) {
   exports.eggs = eggs = $stub;
 }
-
 function rewire$aa($stub) {
   exports.aa = aa = $stub;
 }
-
 function rewire$bb($stub) {
   exports.bb = bb = $stub;
 }
-
 function rewire$quuz($stub) {
   exports.quuz = quuz = $stub;
 }
-
 function rewire$other($stub) {
   exports.other = other = $stub;
 }
-
 function rewire$quux($stub) {
   exports.quux = quux = $stub;
 }
-
 function rewire$corge($stub) {
   exports.corge = corge = $stub;
 }
-
 function rewire$grault($stub) {
   exports.grault = grault = $stub;
 }
-
 function restore() {
   exports.baz = baz = _baz;
   exports.rest = rest = _rest;

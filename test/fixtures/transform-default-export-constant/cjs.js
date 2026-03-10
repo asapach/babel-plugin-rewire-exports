@@ -3,17 +3,14 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.rewire = rewire;
-exports.restore = restore;
 exports["default"] = void 0;
-var foo = 1;
-exports["default"] = foo;
+exports.restore = restore;
+exports.rewire = rewire;
+var foo = exports["default"] = 1;
 var _default = foo;
-
 function rewire($stub) {
   exports["default"] = foo = $stub;
 }
-
 function restore() {
   exports["default"] = foo = _default;
 }

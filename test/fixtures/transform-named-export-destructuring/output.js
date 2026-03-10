@@ -26,12 +26,12 @@ export var {
   a: 3
 };
 var _baz = baz,
-    _rest = rest,
-    _foo = foo,
-    _ham = ham,
-    _eggs = eggs,
-    _aa = aa,
-    _bb = bb;
+  _rest = rest,
+  _foo = foo,
+  _ham = ham,
+  _eggs = eggs,
+  _aa = aa,
+  _bb = bb;
 export function rewire$baz($stub) {
   baz = $stub;
 }

@@ -2,7 +2,6 @@ var foo = class foo {
   constructor() {
     this.foo = 'bar';
   }
-
 };
 export { foo };
 var _foo = foo;

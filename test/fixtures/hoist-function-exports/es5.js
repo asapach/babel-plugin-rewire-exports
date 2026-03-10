@@ -1,16 +1,14 @@
 var baz = function baz() {
   return false;
 };
-
 var foo = function foo() {
   return null;
 };
-
 foo.bar = baz;
 export { foo as default };
 export { baz };
 var _default = foo,
-    _baz = baz;
+  _baz = baz;
 export function rewire($stub) {
   foo = $stub;
 }

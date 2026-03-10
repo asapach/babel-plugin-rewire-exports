@@ -8,7 +8,6 @@ var render = function render() {
     }
   });
 };
-
 var _default = function () {
   return /*#__PURE__*/React.createElement("span", {
     __self: this,
@@ -19,11 +18,9 @@ var _default = function () {
     }
   });
 };
-
 var _jsxFileName = "input.jsx";
 export { _default as default };
 export { render };
-
 const test = () => /*#__PURE__*/React.createElement("span", {
   __self: this,
   __source: {
@@ -32,11 +29,10 @@ const test = () => /*#__PURE__*/React.createElement("span", {
     columnNumber: 27
   }
 });
-
 var _test = test;
 export { _test as test };
 var _default2 = _default,
-    _render = render;
+  _render = render;
 export function rewire($stub) {
   _default = $stub;
 }

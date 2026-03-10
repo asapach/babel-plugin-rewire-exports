@@ -1,11 +1,11 @@
 var foo = 'bar',
-    baz = 'qux';
+  baz = 'qux';
 export { foo, baz };
 var whatsit = false;
 export { whatsit };
 var _whatsit = whatsit,
-    _foo = foo,
-    _baz = baz;
+  _foo = foo,
+  _baz = baz;
 export function rewire$whatsit($stub) {
   whatsit = $stub;
 }

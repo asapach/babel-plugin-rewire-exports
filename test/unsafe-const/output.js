@@ -9,10 +9,10 @@ export let {
   eggs
 } = sausage;
 var _foo = foo,
-    _bar = bar,
-    _default = foo,
-    _ham = ham,
-    _eggs = eggs;
+  _bar = bar,
+  _default = foo,
+  _ham = ham,
+  _eggs = eggs;
 export function rewire$foo($stub) {
   foo = $stub;
 }
