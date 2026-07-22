@@ -2,6 +2,8 @@
 /src
 /test
 /.idea
+/.vscode
+/.claude
 *.log
 .travis.yml
 .eslintrc.yml

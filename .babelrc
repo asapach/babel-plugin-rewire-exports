@@ -2,12 +2,12 @@
   "env": {
     "esm": {
       "presets": [
-        ["@babel/preset-env", { "targets": { "node": "20" }, "modules": false }]
+        ["@babel/preset-env", { "targets": { "node": "12" }, "modules": false }]
       ]
     },
     "cjs": {
       "presets": [
-        ["@babel/preset-env", { "targets": { "node": "20" } }]
+        ["@babel/preset-env", { "targets": { "node": "12" } }]
       ]
     }
   }

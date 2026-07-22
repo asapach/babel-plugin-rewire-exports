@@ -10,6 +10,9 @@
       "require": "./lib/index.cjs"
     }
   },
+  "engines": {
+    "node": ">=12.17.0"
+  },
   "scripts": {
     "clean": "rimraf lib",
     "build:esm": "babel src -d lib --env-name esm",
@@ -40,14 +43,14 @@
     "jest",
     "karma"
   ],
-  "author": "Aliaksei Sapach <dreamsonic@tut.by>",
+  "author": "Aliaksei Sapach <aliaksei.dreamsonic@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/asapach/babel-plugin-rewire-exports/issues"
   },
   "homepage": "https://github.com/asapach/babel-plugin-rewire-exports#readme",
-  "dependencies": {
-    "@babel/template": "7"
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7",
@@ -57,7 +60,7 @@
     "@babel/preset-typescript": "7",
     "@eslint/js": "9",
     "eslint": "9",
-    "globals": "15",
+    "globals": "17",
     "mocha": "11",
     "rimraf": "6"
   }

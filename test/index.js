@@ -1,9 +1,12 @@
 import path from 'path';
 import fs from 'fs';
 import assert from 'assert';
+import { fileURLToPath } from 'url';
 import { transformFileSync } from '@babel/core';
 import { trim } from './util.js';
 import plugin from '../src/index.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 describe('Plugin', () => {
   const fixturesDir = path.join(__dirname, 'fixtures');

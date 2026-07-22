@@ -1,7 +1,4 @@
-import _templateModule from '@babel/template';
-const template = _templateModule.default;
-
-export default function ({types: t}) {
+export default function ({types: t, template}) {
   const defaultIdentifier = t.identifier('default');
   const rewireIdentifier = t.identifier('rewire');
   const restoreIdentifier = t.identifier('restore');

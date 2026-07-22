@@ -2,7 +2,6 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![Build Status][travis-image]][travis-url]
 
 Babel plugin for stubbing (ES6, ES2015) module exports.
 It allows to rewire the exported values in all the importing modules.
@@ -96,9 +95,7 @@ describe('adapter', function () {
   * 🍉 Chrome 61+
   * 🦊 Firefox 60+
   * 💎 Edge 16+
-* 🍏 Node:
-  * [`@std/esm`](https://github.com/standard-things/esm)
-  * `8.5.0+` behind [`--experimental-modules` flag](https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V8.md#8.5.0)
+* 🍏 Node `12.17.0+`
 * ✨ SystemJS
 * 🌟 Webpack 2+
 * 💥 Rollup
@@ -219,7 +216,5 @@ This is *potentially unsafe* if your code relies on constants being read-only.
 
 [npm-image]: https://img.shields.io/npm/v/babel-plugin-rewire-exports.svg?style=flat
 [npm-url]: https://npmjs.org/package/babel-plugin-rewire-exports
-[travis-image]: https://img.shields.io/travis/asapach/babel-plugin-rewire-exports.svg?style=flat
-[travis-url]: https://travis-ci.org/asapach/babel-plugin-rewire-exports
 [downloads-image]: https://img.shields.io/npm/dm/babel-plugin-rewire-exports.svg?style=flat
 [downloads-url]: https://npmjs.org/package/babel-plugin-rewire-exports
