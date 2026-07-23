@@ -50,14 +50,14 @@
   },
   "homepage": "https://github.com/asapach/babel-plugin-rewire-exports#readme",
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "^7.0.0 || ^8.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7",
-    "@babel/core": "7",
-    "@babel/preset-env": "7",
-    "@babel/preset-react": "7",
-    "@babel/preset-typescript": "7",
+    "@babel/cli": "8",
+    "@babel/core": "8",
+    "@babel/preset-env": "8",
+    "@babel/preset-react": "8",
+    "@babel/preset-typescript": "8",
     "@eslint/js": "9",
     "eslint": "9",
     "globals": "17",

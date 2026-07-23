@@ -1,34 +1,13 @@
 var render = function render() {
-  return /*#__PURE__*/React.createElement("span", {
-    __self: this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 6,
-      columnNumber: 10
-    }
-  });
+  return /*#__PURE__*/_jsxDEV("span", {}, void 0, false);
 };
 var _default = function () {
-  return /*#__PURE__*/React.createElement("span", {
-    __self: this,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 2,
-      columnNumber: 10
-    }
-  });
+  return /*#__PURE__*/_jsxDEV("span", {}, void 0, false);
 };
-var _jsxFileName = "input.jsx";
+import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
 export { _default as default };
 export { render };
-const test = () => /*#__PURE__*/React.createElement("span", {
-  __self: this,
-  __source: {
-    fileName: _jsxFileName,
-    lineNumber: 9,
-    columnNumber: 27
-  }
-});
+const test = () => /*#__PURE__*/_jsxDEV("span", {}, void 0, false);
 var _test = test;
 export { _test as test };
 var _default2 = _default,

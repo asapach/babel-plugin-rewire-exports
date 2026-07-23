@@ -1,7 +1,7 @@
 import fs from 'fs';
 import assert from 'assert';
 import { transformFileSync } from '@babel/core';
-import { trim } from './util.js';
+import { trim, fixtureFor } from './util.js';
 import plugin from '../src/index.js';
 
 describe('cjs modules should work', () => {
@@ -12,7 +12,7 @@ describe('cjs modules should work', () => {
     };
 
     const actual = transformFileSync('./test/cjs/input.js', options).code;
-    const expected = fs.readFileSync('./test/cjs/output.js').toString();
+    const expected = fs.readFileSync(fixtureFor('./test/cjs/output.js')).toString();
 
     assert.strictEqual(trim(actual), trim(expected));
   });
@@ -20,12 +20,12 @@ describe('cjs modules should work', () => {
   it('when using env preset', () => {
     const options = {
       babelrc: false,
-      presets: ['@babel/preset-env'],
+      presets: [['@babel/preset-env', { modules: 'commonjs', targets: { ie: '11' } }]],
       plugins: [plugin]
     };
 
     const actual = transformFileSync('./test/cjs/input.js', options).code;
-    const expected = fs.readFileSync('./test/cjs/output-env.js').toString();
+    const expected = fs.readFileSync(fixtureFor('./test/cjs/output-env.js')).toString();
 
     assert.strictEqual(trim(actual), trim(expected));
   });

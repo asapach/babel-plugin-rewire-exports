@@ -1,19 +1,19 @@
 import fs from 'fs';
 import assert from 'assert';
 import { transformFileSync } from '@babel/core';
-import { trim } from './util.js';
+import { trim, fixtureFor } from './util.js';
 import plugin from '../src/index.js';
 
 describe('issues', () => {
   const options = {
     babelrc: false,
-    presets: ['@babel/preset-env'],
+    presets: [['@babel/preset-env', { modules: 'commonjs', targets: { ie: '11' } }]],
     plugins: [plugin]
   };
 
   const assertIssue = (id, options) => {
     const actual = transformFileSync(`./test/issues/${id}/input.js`, options).code;
-    const expected = fs.readFileSync(`./test/issues/${id}/output.js`).toString();
+    const expected = fs.readFileSync(fixtureFor(`./test/issues/${id}/output.js`)).toString();
 
     assert.strictEqual(trim(actual), trim(expected));
   };
@@ -41,7 +41,7 @@ describe('issues', () => {
       babelrc: false,
       presets: [[
         '@babel/preset-env',
-        { modules: false }
+        { modules: false, targets: { ie: '11' } }
       ]],
       plugins: [plugin]
     };
@@ -63,7 +63,7 @@ describe('issues', () => {
       babelrc: false,
       presets: [[
         '@babel/preset-env',
-        { modules: false }
+        { modules: false, targets: { ie: '11' } }
       ]],
       plugins: [plugin]
     };
@@ -75,7 +75,7 @@ describe('issues', () => {
       babelrc: false,
       presets: [[
         '@babel/preset-env',
-        { modules: false }
+        { modules: false, targets: { ie: '11' } }
       ]],
       plugins: [plugin]
     };
@@ -111,7 +111,7 @@ describe('issues', () => {
 
     const path = './test/issues/28';
     const actual = transformFileSync(`${path}/input.jsx`, options).code;
-    const expected = fs.readFileSync(`${path}/output.js`).toString();
+    const expected = fs.readFileSync(fixtureFor(`${path}/output.js`)).toString();
 
     const tweaked = actual.replace(/"[^"]+\binput\.jsx"/, '"input.jsx"');
     assert.strictEqual(trim(tweaked), trim(expected));
