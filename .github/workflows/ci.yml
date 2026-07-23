@@ -13,10 +13,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Babel 7 runs on older Node. The full suite runs here too: preset fixtures are
-          # committed as Babel 8 output, with sibling *.babel7.js variants where Babel 7 differs.
-          - babel: 7
-            node: 18
+          # Babel 7. The full suite runs here too: preset fixtures are committed as Babel 8
+          # output, with sibling *.babel7.js variants where Babel 7 differs.
+          # Node 20 is the floor the dev toolchain supports (rimraf 6 needs "20 || >=22").
           - babel: 7
             node: 20
           # Babel 8 requires Node ^22.18.0 || >=24.11.0.
@@ -32,15 +31,20 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: yarn
 
-      - name: Install dependencies (Babel 8)
-        run: yarn install --frozen-lockfile
-
-      - name: Downgrade to Babel 7
+      # Pin Babel 7 BEFORE installing so the Node-20 runner never resolves Babel 8
+      # (whose engines require Node ^22.18.0 || >=24.11.0 and would fail `yarn install`).
+      - name: Pin Babel 7
         if: matrix.babel == 7
         run: >-
-          yarn add --dev
-          @babel/core@^7 @babel/cli@^7 @babel/preset-env@^7
-          @babel/preset-react@^7 @babel/preset-typescript@^7
+          node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json','utf8'));for(const k of Object.keys(p.devDependencies)){if(k.startsWith('@babel/'))p.devDependencies[k]='^7.0.0';}fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\n');"
+
+      - name: Install (Babel 7)
+        if: matrix.babel == 7
+        run: yarn install --no-lockfile
+
+      - name: Install (Babel 8)
+        if: matrix.babel == 8
+        run: yarn install --frozen-lockfile
 
       - name: Build
         run: yarn build
