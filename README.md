@@ -106,8 +106,7 @@ describe('adapter', function () {
   * Works with [🃏 Jest](https://jestjs.io/) using [babel-jest](https://github.com/facebook/jest/tree/master/packages/babel-jest)
 
 ## How it works
-[In ES6, imports are live read-only views on exported values](
-http://exploringjs.com/es6/ch_modules.html#_in-es6-imports-are-live-read-only-views-on-exported-values):
+In ES6, imports are live read-only views on exported values:
 
 ```js
 //------ lib.js ------
@@ -198,7 +197,7 @@ $ babel --plugins rewire-exports script.js
 ### Via Node API
 
 ```javascript
-require("@babel/core").transform("code", {
+require("@babel/core").transformSync("code", {
   plugins: ["rewire-exports"]
 });
 ```
