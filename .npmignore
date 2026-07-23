@@ -4,7 +4,10 @@
 /.idea
 /.vscode
 /.claude
+/.github
 *.log
-.travis.yml
+.babelrc
 .eslintrc.yml
+.mocharc.yml
+eslint.config.mjs
 yarn.lock
